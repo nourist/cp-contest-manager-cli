@@ -1,0 +1,19 @@
+{
+	"name": "cp-contest-manager",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "node ./index.js"
+	},
+	"bin": {
+		"cpm": "./index.js"
+	},
+	"author": "nourist",
+	"license": "ISC",
+	"dependencies": {
+		"commander": "^12.1.0"
+	},
+	"type": "module"
+}
