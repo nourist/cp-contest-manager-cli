@@ -7,6 +7,7 @@ import chalk from 'chalk';
 import Table from 'cli-table';
 import fs from 'fs';
 import path from 'path';
+import { exec } from 'child_process';
 
 import { rootDir, version } from './constant.js';
 import { getData } from './utils.js';
@@ -181,9 +182,28 @@ program
 		}
 	});
 
-program.command('open').action((str, option) => {
-	console.log('OPEN');
-});
+program
+	.command('open')
+	.description('Open contest in vscode')
+	.action(async(str, option) => {
+		const data = getData();
+
+		if (!data.contests) {
+			console.log(chalk.red('There are no contest to deleted!'));
+			return;
+		}
+
+		const ans = await inquirer.prompt([
+			{
+				type: 'search-list',
+				message: 'Select contest:',
+				name: 'name',
+				choices: data.contests,
+			},
+		]);
+
+		exec(`code -r ${path.join(rootDir, ans.name)}`)
+	});
 
 program.command('export').action((str, option) => {
 	console.log('EXPORT');

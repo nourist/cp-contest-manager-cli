@@ -1,7 +1,7 @@
 {
-	"name": "cp-contest-manager",
-	"version": "1.0.0",
-	"description": "",
+	"name": "cp-contest-manager-cli",
+	"version": "0.0.1",
+	"description": "A CLI tool makes you manage CP contest easier & more accurate",
 	"main": "index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
