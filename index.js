@@ -202,6 +202,8 @@ program
 			},
 		]);
 
+		console.log(chalk.blue("Opening..."));
+
 		exec(`code -r ${path.join(rootDir, ans.name)}`)
 	});
 

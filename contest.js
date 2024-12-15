@@ -23,6 +23,7 @@ export const createContest = (name, tasks = [], sub = false) => {
 		createAt: Date.now(),
 		numberOfTask: tasks.length,
 		tasksName: tasks.join(' '),
+		sub,
 	});
 
 	updateData(data);
