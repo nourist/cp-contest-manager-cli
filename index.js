@@ -11,7 +11,12 @@ import { exec } from 'child_process';
 
 import { rootDir, version } from './constant.js';
 import { getData } from './utils.js';
-import { isExistContest, createContest, deleteContest } from './contest.js';
+import {
+	isExistContest,
+	createContest,
+	deleteContest,
+	markContest,
+} from './contest.js';
 
 inquirer.registerPrompt('search-list', inquirerSearchList);
 
@@ -65,12 +70,19 @@ program
 		});
 
 		table.push(
-			...data.contests.map((contest, index) => [
-				index + 1,
-				contest.name,
-				new Date(contest.createAt).toDateString(),
-				`${contest.numberOfTask}: ${contest.tasksName}`,
-			]),
+			...data.contests.map((contest, index) => {
+				const res = [
+					index + 1,
+					contest.name,
+					new Date(contest.createAt).toDateString(),
+					`${contest.numberOfTask}: ${contest.tasksName}`,
+				];
+				if (contest.ac) {
+					return res.map((item) => chalk.green(item));
+				} else {
+					return res;
+				}
+			}),
 		);
 
 		console.log(table.toString());
@@ -185,7 +197,7 @@ program
 program
 	.command('open')
 	.description('Open contest in vscode')
-	.action(async(str, option) => {
+	.action(async (str, option) => {
 		const data = getData();
 
 		if (!data.contests) {
@@ -202,9 +214,57 @@ program
 			},
 		]);
 
-		console.log(chalk.blue("Opening..."));
+		console.log(chalk.blue('Opening...'));
 
-		exec(`code -r ${path.join(rootDir, ans.name)}`)
+		exec(`code -r ${path.join(rootDir, ans.name)}`);
+	});
+
+program
+	.command('mark')
+	.description('Mark contest as done')
+	.action(async (str, option) => {
+		const data = getData();
+
+		if (!data.contests) {
+			console.log(chalk.red('There are no contest to mark!'));
+			return;
+		}
+
+		const ans = await inquirer.prompt([
+			{
+				type: 'search-list',
+				message: 'Select contest:',
+				name: 'name',
+				choices: data.contests,
+			},
+		]);
+
+		markContest(ans.name, true);
+		console.log(chalk.green('Mark contest successfull!'));
+	});
+
+program
+	.command('unmark')
+	.description('Unmark contest as done')
+	.action(async (str, option) => {
+		const data = getData();
+
+		if (!data.contests) {
+			console.log(chalk.red('There are no contest to unmark!'));
+			return;
+		}
+
+		const ans = await inquirer.prompt([
+			{
+				type: 'search-list',
+				message: 'Select contest:',
+				name: 'name',
+				choices: data.contests,
+			},
+		]);
+
+		markContest(ans.name, false);
+		console.log(chalk.green('Unmark contest successfull!'));
 	});
 
 program.command('export').action((str, option) => {

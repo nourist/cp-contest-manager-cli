@@ -24,6 +24,7 @@ export const createContest = (name, tasks = [], sub = false) => {
 		numberOfTask: tasks.length,
 		tasksName: tasks.join(' '),
 		sub,
+		ac: false,
 	});
 
 	updateData(data);
@@ -62,4 +63,14 @@ export const deleteContest = (name) => {
 		fsExtra.emptyDirSync(path.join(rootDir, name));
 		fs.rmdirSync(path.join(rootDir, name));
 	}
+};
+
+export const markContest = (name, ac) => {
+	const data = getData();
+	data.contests.forEach((contest, index) => {
+		if (contest.name == name) {
+			data.contests[index].ac = ac;
+		}
+	});
+	updateData(data);
 };
