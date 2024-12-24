@@ -38,15 +38,27 @@ export const createContest = (name, tasks = [], sub = false) => {
 				path.join(rootDir, name, task, `${task}.cpp`),
 				template.replaceAll('{name}', task),
 			);
-			fs.writeFileSync(path.join(rootDir, name, task, `${task}.inp`), '');
-			fs.writeFileSync(path.join(rootDir, name, task, `${task}.out`), '');
+			fs.writeFileSync(
+				path.join(rootDir, name, task, `${task}.inp`),
+				'',
+			);
+			fs.writeFileSync(
+				path.join(rootDir, name, task, `${task}.out`),
+				'',
+			);
 		} else {
 			fs.writeFileSync(
 				path.join(rootDir, name, `${task}.cpp`),
 				template.replaceAll('{name}', task),
 			);
-			fs.writeFileSync(path.join(rootDir, name, `${task}.inp`), '');
-			fs.writeFileSync(path.join(rootDir, name, `${task}.out`), '');
+			fs.writeFileSync(
+				path.join(rootDir, name, `${task}.inp`),
+				'',
+			);
+			fs.writeFileSync(
+				path.join(rootDir, name, `${task}.out`),
+				'',
+			);
 		}
 	});
 };

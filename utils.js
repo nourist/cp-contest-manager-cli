@@ -9,5 +9,8 @@ export const getData = () => {
 };
 
 export const updateData = (data = {}) => {
-	fs.writeFileSync(path.join(rootDir, 'data.json'), JSON.stringify(data));
+	fs.writeFileSync(
+		path.join(rootDir, 'data.json'),
+		JSON.stringify(data),
+	);
 };
