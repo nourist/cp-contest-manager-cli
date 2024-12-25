@@ -1,7 +1,10 @@
 import chalk from 'chalk';
 import Table from 'cli-table';
 import { exec } from 'child_process';
+import inquirer from 'inquirer';
+import path from 'path';
 
+import { rootDir } from './constant.js';
 import { getData } from './utils.js';
 import {
 	isExistContest,
