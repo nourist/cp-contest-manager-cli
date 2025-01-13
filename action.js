@@ -17,9 +17,8 @@ class actions {
 	list = (str, option) => {
 		const data = getData();
 
-		// data.contests.forEach((contest, index) =>
-		// 	console.log(index + 1, contest),
-		// );
+		data.contests.sort((a, b) => a.name.localeCompare(b.name));
+
 		const table = new Table({
 			head: ['', 'Name', 'Create At', 'Tasks'],
 		});
