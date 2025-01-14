@@ -92,8 +92,8 @@ class actions {
 			const res = await inquirer.prompt({
 				name: 'task',
 				type: 'input',
-				message: `Enter task ${i} name: `,
-				default: `bai${i}`,
+				message: `Enter problem ${i} name: `,
+				default: `cau${i}`,
 				validate: (input) => {
 					const regex = /^[a-zA-Z0-9]+$/;
 
