@@ -56,12 +56,12 @@ program
 
 program
 	.command('create')
-	.description('Create contests')
+	.description('Create contest')
 	.action(action.create);
 
 program
 	.command('delete')
-	.description('Delete contests')
+	.description('Delete contest')
 	.action(action.delete);
 
 program
@@ -78,6 +78,11 @@ program
 	.command('unmark')
 	.description('Unmark contest as done')
 	.action(action.unmark);
+
+program
+	.command('rename')
+	.description('Rename contest')
+	.action(action.rename);
 
 program
 	.command('export')

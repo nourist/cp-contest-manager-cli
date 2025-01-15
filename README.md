@@ -10,6 +10,7 @@
 - **Open**: Open a contest directory in Visual Studio Code.
 - **Mark**: Mark a contest as completed.
 - **Unmark**: Undo the completion mark for a contest.
+- **Rename**: Rename contest
 - **Export**: Export contest data to another folder for easy sharing.
 
 ## Installation
@@ -72,6 +73,13 @@ Unmarks a contest as completed.
 
 ```bash
 cpm unmark
+```
+
+#### `rename`
+Rename contest
+
+```bash
+cpm rename
 ```
 
 #### `export`
