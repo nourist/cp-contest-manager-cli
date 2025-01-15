@@ -1,4 +1,4 @@
-import fs from 'fs-extra'
+import fs from 'fs-extra';
 import path from 'path';
 
 import { rootDir } from './constant.js';
@@ -18,14 +18,14 @@ export const updateData = (data = {}) => {
 export const getConfig = () => {
 	const res = fs.readFileSync(path.join(rootDir, 'config.json'));
 	return JSON.parse(res);
-}
+};
 
 export const updateConfig = (config = {}) => {
 	fs.writeFileSync(
 		path.join(rootDir, 'config.json'),
 		JSON.stringify(config),
-	)
-}
+	);
+};
 
 export const copySource = (source, dest) => {
 	const items = fs.readdirSync(source);
@@ -39,9 +39,8 @@ export const copySource = (source, dest) => {
 
 		if (stats.isDirectory()) {
 			copySource(sourceItemPath, dest);
-		}
-		else if(ext==='.cpp' || ext==='.py') {
+		} else if (ext === '.cpp' || ext === '.py') {
 			fs.copySync(sourceItemPath, destItemPath);
 		}
 	}
-}
+};

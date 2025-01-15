@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 import Table from 'cli-table';
-import {existsSync} from 'fs'
+import { existsSync } from 'fs';
 import { exec } from 'child_process';
 import inquirer from 'inquirer';
 import path from 'path';
@@ -12,7 +12,7 @@ import {
 	createContest,
 	deleteContest,
 	markContest,
-	exportContest
+	exportContest,
 } from './contest.js';
 
 class actions {
@@ -231,7 +231,9 @@ class actions {
 
 		if (!config.exportDir) {
 			console.log(
-				chalk.magenta('You have not set the path to export contest!'),
+				chalk.magenta(
+					'You have not set the path to export contest!',
+				),
 			);
 			const ans = await inquirer.prompt([
 				{
@@ -241,9 +243,8 @@ class actions {
 					validate: (input) => {
 						if (existsSync(input)) {
 							return true;
-						}
-						else {
-							return Error("Please enter valid path");	
+						} else {
+							return Error('Please enter valid path');
 						}
 					},
 				},
@@ -252,12 +253,14 @@ class actions {
 			updateConfig(config);
 		}
 
-		const ans = await inquirer.prompt([{
-			name: 'name',
-			type: 'search-list',
-			message: "Select contest to export:",
-			choices: data.contests,
-		}])
+		const ans = await inquirer.prompt([
+			{
+				name: 'name',
+				type: 'search-list',
+				message: 'Select contest to export:',
+				choices: data.contests,
+			},
+		]);
 
 		exportContest(ans.name);
 		console.log(chalk.green('Export contest successfull!'));

@@ -4,7 +4,12 @@ import path from 'path';
 
 import { rootDir } from './constant.js';
 import template from './template.js';
-import { getData, updateData, getConfig, copySource } from './utils.js';
+import {
+	getData,
+	updateData,
+	getConfig,
+	copySource,
+} from './utils.js';
 
 export const isExistContest = (name) => {
 	const data = getData();
@@ -102,5 +107,5 @@ export const exportContest = (name) => {
 	const source = path.join(rootDir, name);
 	const dest = path.join(config.exportDir, name);
 
-	copySource(source, dest)
-}
+	copySource(source, dest);
+};
