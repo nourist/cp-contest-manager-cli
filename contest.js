@@ -4,14 +4,19 @@ import path from 'path';
 
 import { rootDir } from './constant.js';
 import template from './template.js';
-import { getData, updateData } from './utils.js';
+import { getData, updateData, getConfig, copySource } from './utils.js';
 
 export const isExistContest = (name) => {
 	const data = getData();
 	return data.contests.some((contest) => contest.name == name);
 };
 
-export const createContest = (name, tasks = [], sub = false) => {
+export const createContest = (
+	name,
+	tasks = [],
+	sub = false,
+	io = false,
+) => {
 	if (!fs.existsSync(path.join(rootDir, name))) {
 		fs.mkdirSync(path.join(rootDir, name));
 	}
@@ -38,27 +43,31 @@ export const createContest = (name, tasks = [], sub = false) => {
 				path.join(rootDir, name, task, `${task}.cpp`),
 				template.replaceAll('{name}', task),
 			);
-			fs.writeFileSync(
-				path.join(rootDir, name, task, `${task}.inp`),
-				'',
-			);
-			fs.writeFileSync(
-				path.join(rootDir, name, task, `${task}.out`),
-				'',
-			);
+			if (io) {
+				fs.writeFileSync(
+					path.join(rootDir, name, task, `${task}.inp`),
+					'',
+				);
+				fs.writeFileSync(
+					path.join(rootDir, name, task, `${task}.out`),
+					'',
+				);
+			}
 		} else {
 			fs.writeFileSync(
 				path.join(rootDir, name, `${task}.cpp`),
 				template.replaceAll('{name}', task),
 			);
-			fs.writeFileSync(
-				path.join(rootDir, name, `${task}.inp`),
-				'',
-			);
-			fs.writeFileSync(
-				path.join(rootDir, name, `${task}.out`),
-				'',
-			);
+			if (io) {
+				fs.writeFileSync(
+					path.join(rootDir, name, `${task}.inp`),
+					'',
+				);
+				fs.writeFileSync(
+					path.join(rootDir, name, `${task}.out`),
+					'',
+				);
+			}
 		}
 	});
 };
@@ -86,3 +95,12 @@ export const markContest = (name, ac) => {
 	});
 	updateData(data);
 };
+
+export const exportContest = (name) => {
+	const config = getConfig();
+
+	const source = path.join(rootDir, name);
+	const dest = path.join(config.exportDir, name);
+
+	copySource(source, dest)
+}

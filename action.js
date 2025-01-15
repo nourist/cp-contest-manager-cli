@@ -1,16 +1,18 @@
 import chalk from 'chalk';
 import Table from 'cli-table';
+import {existsSync} from 'fs'
 import { exec } from 'child_process';
 import inquirer from 'inquirer';
 import path from 'path';
 
 import { rootDir } from './constant.js';
-import { getData } from './utils.js';
+import { getData, getConfig, updateConfig } from './utils.js';
 import {
 	isExistContest,
 	createContest,
 	deleteContest,
 	markContest,
+	exportContest
 } from './contest.js';
 
 class actions {
@@ -54,7 +56,7 @@ class actions {
 				validate: (input) => {
 					if (isExistContest(input)) {
 						return Error(
-							`Contest "${input}" already exists`,
+							`Contest "${input}" already exists!`,
 						);
 					}
 					return true;
@@ -80,9 +82,15 @@ class actions {
 				message:
 					'Do you want to create sub folder for each task?',
 				choices: ['NO', 'YES'],
-				filter: (input) => {
-					return input == 'YES';
-				},
+				filter: (input) => input == 'YES',
+			},
+			{
+				name: 'io',
+				type: 'list',
+				message:
+					'Do you want to create input/output file by default?',
+				choices: ['NO', 'YES'],
+				filter: (input) => input == 'YES',
 			},
 		]);
 
@@ -113,7 +121,7 @@ class actions {
 			tasks.push(res.task);
 		}
 
-		createContest(ans.contest_name, tasks, ans.sub);
+		createContest(ans.contest_name, tasks, ans.sub, ans.io);
 		console.log(chalk.green('Create contest successfull!'));
 	};
 
@@ -218,7 +226,41 @@ class actions {
 	};
 
 	export = async (str, option) => {
-		console.log('EXPORT');
+		const config = getConfig();
+		const data = getData();
+
+		if (!config.exportDir) {
+			console.log(
+				chalk.magenta('You have not set the path to export contest!'),
+			);
+			const ans = await inquirer.prompt([
+				{
+					name: 'path',
+					type: 'input',
+					message: 'Enter export path:',
+					validate: (input) => {
+						if (existsSync(input)) {
+							return true;
+						}
+						else {
+							return Error("Please enter valid path");	
+						}
+					},
+				},
+			]);
+			config.exportDir = ans.path;
+			updateConfig(config);
+		}
+
+		const ans = await inquirer.prompt([{
+			name: 'name',
+			type: 'search-list',
+			message: "Select contest to export:",
+			choices: data.contests,
+		}])
+
+		exportContest(ans.name);
+		console.log(chalk.green('Export contest successfull!'));
 	};
 }
 
