@@ -12,6 +12,7 @@ import {
 	createContest,
 	deleteContest,
 	markContest,
+	renameContest,
 	exportContest,
 } from './contest.js';
 
@@ -225,9 +226,48 @@ class actions {
 		console.log(chalk.green('Unmark contest successfull!'));
 	};
 
+	rename = async (str, option) => {
+		const data = getData();
+
+		if (!data.contests) {
+			console.log(chalk.red('There are no contest to rename!'));
+			return;
+		}
+
+		const ans = await inquirer.prompt([
+			{
+				type: 'search-list',
+				message: 'Select contest:',
+				name: 'name',
+				choices: data.contests,
+			},
+			{
+				type: 'input',
+				message: 'Enter new Name:',
+				name: 'newName',
+				validate: (input) => {
+					if (isExistContest(input)) {
+						return Error(
+							`Contest "${input}" already exists!`,
+						);
+					}
+					return true;
+				},
+			},
+		]);
+
+		renameContest(ans.name, ans.newName);
+		console.log(chalk.green('Rename contest successfull!'));
+	};
+
 	export = async (str, option) => {
 		const config = getConfig();
 		const data = getData();
+
+		if (!data.contests) {
+			console.log(chalk.red('There are no contest to export!'));
+			return;
+		}
 
 		if (!config.exportDir) {
 			console.log(

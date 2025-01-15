@@ -93,12 +93,30 @@ export const deleteContest = (name) => {
 
 export const markContest = (name, ac) => {
 	const data = getData();
+
 	data.contests.forEach((contest, index) => {
 		if (contest.name == name) {
 			data.contests[index].ac = ac;
 		}
 	});
+
 	updateData(data);
+};
+
+export const renameContest = (name, newName) => {
+	const data = getData();
+
+	data.contests.forEach((contest, index) => {
+		if (contest.name == name) {
+			data.contests[index].name = newName;
+		}
+	});
+
+	updateData(data);
+	fs.renameSync(
+		path.join(rootDir, name),
+		path.join(rootDir, newName),
+	);
 };
 
 export const exportContest = (name) => {
