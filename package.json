@@ -14,6 +14,7 @@
 	"license": "CC-BY-NC-4.0",
 	"type": "module",
 	"dependencies": {
+		"app-root-path": "^3.1.0",
 		"cli-table": "^0.3.11",
 		"colors": "^1.4.0",
 		"commander": "^13.0.0",
