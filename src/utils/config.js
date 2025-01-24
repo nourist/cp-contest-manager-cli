@@ -10,15 +10,15 @@ export const updateConfig = (config = configTemplate) => {
 		path.join(appRootPath.toString(), configFileName),
 		JSON.stringify(config),
 	);
-	if (!fs.pathExistsSync(config.contestDir)) {
-		fs.mkdirSync(config.contestDir);
-	}
 };
 
 export const getConfig = () => {
 	if (
 		!fs.existsSync(
-			path.join(appRootPath.toString(), configFileName),
+			path.join(
+				appRootPath.toString(),
+				configFileName,
+			),
 		)
 	) {
 		updateConfig();
@@ -26,7 +26,10 @@ export const getConfig = () => {
 
 	return JSON.parse(
 		fs.readFileSync(
-			path.join(appRootPath.toString(), configFileName),
+			path.join(
+				appRootPath.toString(),
+				configFileName,
+			),
 		),
 	);
 };

@@ -17,7 +17,11 @@ export const getSources = (dir) => {
 
 		if (stats.isDirectory()) {
 			res.push(...getSources(fullPath));
-		} else if (ext === '.cpp' || ext === '.c' || ext === '.py') {
+		} else if (
+			ext === '.cpp' ||
+			ext === '.c' ||
+			ext === '.py'
+		) {
 			res.push(path.basename(item, ext));
 		}
 	});
@@ -35,8 +39,15 @@ export const exportSources = (dir, dest) => {
 
 		if (stats.isDirectory()) {
 			exportSources(fullPath, dest);
-		} else if (ext === '.cpp' || ext === '.c' || ext === '.py') {
-			fs.copyFileSync(fullPath, path.join(dest, item));
+		} else if (
+			ext === '.cpp' ||
+			ext === '.c' ||
+			ext === '.py'
+		) {
+			fs.copyFileSync(
+				fullPath,
+				path.join(dest, item),
+			);
 		}
 	});
 };
@@ -44,7 +55,9 @@ export const exportSources = (dir, dest) => {
 export const getProblems = (contest) => {
 	const { contestDir } = getConfig();
 
-	const problems = getSources(path.join(contestDir, contest));
+	const problems = getSources(
+		path.join(contestDir, contest),
+	);
 	return problems.map((item) =>
 		path.basename(item, path.extname(item)),
 	);
@@ -65,13 +78,17 @@ export const getContest = (name) => {
 	};
 };
 
-export const getContests = () => {
+export const getContests = ({ ac: acRequired = false }) => {
 	const { contestDir } = getConfig();
 	const { ac } = getData();
 
-	const items = fs.readdirSync(contestDir);
+	let items = fs.readdirSync(contestDir);
 
-	items.filter((item) => {
+	items = items.filter((item) => {
+		if (acRequired && !ac[item]) {
+			return false;
+		}
+
 		const fullPath = path.join(contestDir, item);
 		const stats = fs.statSync(fullPath);
 
@@ -102,16 +119,28 @@ export const createContest = (
 		if (sub) {
 			fs.mkdirSync(path.join(contestPath, problem));
 			fs.writeFileSync(
-				path.join(contestPath, problem, `${problem}.cpp`),
+				path.join(
+					contestPath,
+					problem,
+					`${problem}.cpp`,
+				),
 				cpp.replace('{name}', problem),
 			);
 			if (io) {
 				fs.writeFileSync(
-					path.join(contestPath, problem, `${problem}.inp`),
+					path.join(
+						contestPath,
+						problem,
+						`${problem}.inp`,
+					),
 					'',
 				);
 				fs.writeFileSync(
-					path.join(contestPath, problem, `${problem}.out`),
+					path.join(
+						contestPath,
+						problem,
+						`${problem}.out`,
+					),
 					'',
 				);
 			}
@@ -122,11 +151,17 @@ export const createContest = (
 			);
 			if (io) {
 				fs.writeFileSync(
-					path.join(contestPath, `${problem}.inp`),
+					path.join(
+						contestPath,
+						`${problem}.inp`,
+					),
 					'',
 				);
 				fs.writeFileSync(
-					path.join(contestPath, `${problem}.out`),
+					path.join(
+						contestPath,
+						`${problem}.out`,
+					),
 					'',
 				);
 			}

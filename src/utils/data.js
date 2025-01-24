@@ -18,11 +18,15 @@ export const updateData = (data = dataTemplate) => {
 export const getData = () => {
 	const { contestDir } = getConfig();
 
-	if (!fs.existsSync(path.join(contestDir, dataFileName))) {
+	if (
+		!fs.existsSync(path.join(contestDir, dataFileName))
+	) {
 		updateData();
 	}
 
 	return JSON.parse(
-		fs.readFileSync(path.join(contestDir, dataFileName)),
+		fs.readFileSync(
+			path.join(contestDir, dataFileName),
+		),
 	);
 };
