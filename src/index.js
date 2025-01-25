@@ -16,6 +16,7 @@ import unmark from './actions/unmark.js';
 import rename from './actions/rename.js';
 import open from './actions/open.js';
 import exportC from './actions/export.js';
+import workspace from './actions/workspace.js';
 
 const program = new Command();
 
@@ -107,5 +108,10 @@ program
 	.option('-c, --ac', 'Export only complete contest')
 	.argument('[name]', 'Name of contest to export')
 	.action(exportC);
+
+program
+	.command('workspace')
+	.description('Open folder contains all contests in ' + 'VScode'.bgCyan)
+	.action(workspace);
 
 program.parse(process.argv);
