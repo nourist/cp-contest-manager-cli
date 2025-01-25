@@ -13,13 +13,16 @@ import create from './actions/create.js';
 import deleteC from './actions/delete.js';
 import mark from './actions/mark.js';
 import unmark from './actions/unmark.js';
+import rename from './actions/rename.js';
+import open from './actions/open.js';
 
 const program = new Command();
 
 program
 	.name('cpm')
 	.description(
-		'Cli tool to manage competitive programming contest solution',
+		'Cli tool to manage competitive programming contest ' +
+			'solution'.bgBlue,
 	)
 	.version(version);
 
@@ -82,5 +85,18 @@ program
 	.description('Mark contest as ' + 'UnComplete'.bgRed)
 	.argument('[name]', 'Name of contest to unmark')
 	.action(unmark);
+
+program
+	.command('rename')
+	.description('Rename contest')
+	.option('-o, --oldname <oldname>', 'Name of contest to rename')
+	.option('-n, --newname <newname>', 'Name to replace')
+	.action(rename);
+
+program
+	.command('open')
+	.description('Open contest directory in ' + 'VScode'.bgCyan)
+	.argument('[name]')
+	.action(open);
 
 program.parse(process.argv);

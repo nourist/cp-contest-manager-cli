@@ -3,7 +3,12 @@ import path from 'path';
 
 import { getConfig } from './config.js';
 import { getData, updateData } from './data.js';
-import { getLastUpdate, getSources, exportSources } from './file.js';
+import {
+	getLastUpdate,
+	getSources,
+	exportSources,
+	renameSources,
+} from './file.js';
 import cpp from '../template/cpp.js';
 
 export const getProblems = (contest) => {
@@ -124,6 +129,28 @@ export const markContest = (name, ac = true) => {
 	const data = getData();
 	data.ac[name] = ac;
 	updateData(data);
+};
+
+export const renameContest = (oldName, newName) => {
+	const { contestDir } = getConfig();
+	const data = getData();
+
+	if (fs.pathExistsSync(path.join(contestDir, oldName))) {
+		fs.renameSync(
+			path.join(contestDir, oldName),
+			path.join(contestDir, newName),
+		);
+	}
+
+	data[newName] = data[oldName];
+	data[oldName] = undefined;
+	updateData(data);
+};
+
+export const renameProblems = (contest, oldName, newName) => {
+	const { contestDir } = getConfig();
+
+	renameSources(path.join(contestDir, contest), oldName, newName);
 };
 
 export const exportContest = (name) => {

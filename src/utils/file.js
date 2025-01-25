@@ -40,6 +40,32 @@ export const getSources = (dir) => {
 	return res;
 };
 
+export const renameSources = (dir, oldName, newName) => {
+	const items = fs.readdirSync(dir);
+
+	items.forEach((item) => {
+		const fullPath = path.join(dir, item);
+		const stats = fs.statSync(fullPath);
+		const ext = path.extname(item);
+
+		const fullname = path.basename(item, ext);
+
+		if (fullname === oldName) {
+			fs.renameSync(fullPath, path.join(dir, newName + ext));
+		}
+
+		if (stats.isDirectory()) {
+			renameSrouces(fullPath, oldName, newName);
+		} else if (ext === '.cpp' || ext === '.c' || ext === '.py') {
+			const content = fs.readFileSync(fullPath, 'utf-8');
+			content = content.replaceAll(
+				new RegExp(oldName + '.', 'i'),
+				newName + '.',
+			);
+		}
+	});
+};
+
 export const exportSources = (dir, dest) => {
 	const items = fs.readdirSync(dir);
 
