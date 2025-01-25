@@ -84,7 +84,7 @@ program
 
 program
 	.command('unmark')
-	.description('Mark contest as ' + 'UnComplete'.bgRed)
+	.description('Mark contest as ' + 'InComplete'.bgRed)
 	.argument('[name]', 'Name of contest to unmark')
 	.action(unmark);
 
