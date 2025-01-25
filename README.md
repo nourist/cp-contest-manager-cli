@@ -1,141 +1,184 @@
-# cp-contest-manager
+# Competitive Programming Contest Manager (CPM)
 
-**cp-contest-manager** is a CLI tool designed to help you efficiently create and manage solutions for competitive programming contests. This tool provides an easy way to organize contests, mark progress, and export data for sharing.
+`cpm` is a CLI tool designed to manage and organize solutions for competitive programming contests. `It acts as a centralized repository for storing, accessing, and sharing solutions, helping you efficiently manage your contest work.`
 
 ## Features
+- **Configuration**: Set up and manage your contest directory.
+- **Listing**: View contests with options to filter by completion status.
+- **Creation**: Create new contests with optional sub-directories and input/output files for problems.
+- **Deletion**: Remove contests from the repository.
+- **Marking**: Mark contests as complete or incomplete.
+- **Renaming**: Rename contests for better organization.
+- **Opening**: Open contest directories directly in VS Code.
+- **Exporting**: Share your contest solutions easily by exporting them.
+- **Workspace**: Open the entire contest directory workspace in VS Code.
 
-- **List**: View all contests currently managed by the tool.
-- **Create**: Add a new contest to your collection.
-- **Delete**: Remove a contest from your collection.
-- **Open**: Open a contest directory in Visual Studio Code.
-- **Mark**: Mark a contest as completed.
-- **Unmark**: Undo the completion mark for a contest.
-- **Rename**: Rename contest
-- **Export**: Export contest data to another folder for easy sharing.
+---
 
 ## Installation
 
-To install **cp-contest-manager**, you need [Node.js](https://nodejs.org/) installed on your system.
+1. Ensure you have [Node.js](https://nodejs.org/) installed on your system.
+2. Clone this repository or download the source code.
 
-```bash
-git clone https://github.com/nourist/cp-contest-manager-cli.git
-cd cp-contest-manager-cli
-npm install -g .
-```
+	```bash
+	git clone https://github.com/nourist/cp-contest-manager-cli.git
+	```
+3. Navigate to the project directory
+
+	```bash
+	cd cp-contest-manager-cli
+	``` 
+4. Run the following command to install dependencies:
+
+   ```bash
+   npm install
+   ```
+5. Make the CLI tool globally accessible:
+
+   ```bash
+   npm i -g .
+   ```
+
+Now you can use `cpm` from anywhere in your terminal.
+
+---
 
 ## Usage
 
-Run the tool using the following command:
-
+### General Command Format
 ```bash
-cpm <command>
+cpm <command> [options]
 ```
 
 ### Available Commands
 
-#### `list`
-Lists all contests currently managed by the tool.
+#### `config`
+Configure the contest manager.
 
 ```bash
-cpm list
+cpm config [path] [options]
 ```
+- **Path**: Specify the directory for storing/exporting contest solutions.
+- **Options**:
+  - `-c, --content <content>`: Configure specific content. Choices:
+    - `contest`: Path to store contests.
+    - `export`: Path to export contests.
+
+#### `list`
+List all contests.
+
+```bash
+cpm list [options]
+```
+- **Options**:
+  - `-a, --ac`: List only completed (AC) contests.
 
 #### `create`
-Creates a new contest.
+Create a new contest.
 
 ```bash
-cpm create
+cpm create [options]
 ```
+- **Options**:
+  - `-s, --sub`: Create sub-directories for each problem.
+  - `-i, --io`: Create input/output files for each problem.
 
 #### `delete`
-Deletes an existing contest.
+Delete a contest.
 
 ```bash
-cpm delete
+cpm delete [name]
 ```
-
-#### `open`
-Opens a contest folder in Visual Studio Code.
-
-```bash
-cpm open
-```
+- **Name**: Specify the name of the contest to delete.
 
 #### `mark`
-Marks a contest as completed.
+Mark a contest as complete.
 
 ```bash
-cpm mark
+cpm mark [name]
 ```
+- **Name**: Specify the name of the contest to mark.
 
 #### `unmark`
-Unmarks a contest as completed.
+Mark a contest as incomplete.
 
 ```bash
-cpm unmark
+cpm unmark [name]
 ```
+- **Name**: Specify the name of the contest to unmark.
 
 #### `rename`
-Rename contest
+Rename a contest.
 
 ```bash
-cpm rename
+cpm rename [options]
 ```
+- **Options**:
+  - `-o, --oldname <oldname>`: The current name of the contest.
+  - `-n, --newname <newname>`: The new name for the contest.
+
+#### `open`
+Open a contest directory in VS Code.
+
+```bash
+cpm open [name]
+```
+- **Name**: Specify the name of the contest to open.
 
 #### `export`
-Exports a contest folder to a specified location.
+Export contests for easy sharing.
 
 ```bash
-cpm export
+cpm export [name] [options]
 ```
+- **Name**: Specify the name of the contest to export.
+- **Options**:
+  - `-a, --all`: Export all contests.
+  - `-c, --ac`: Export only completed contests.
 
-## File Structure
-
-**Root directory default**: D:/cpm
-
-Upon initialization, the tool creates the following files in its root directory:
-
-- **data.json**: Stores information about contests.
-- **config.json**: Stores configuration settings.
-
-## Development
-
-If you want to contribute or modify this tool, clone the repository and install dependencies:
+#### `workspace`
+Open the folder containing all contests in VS Code.
 
 ```bash
-git clone https://github.com/nourist/cp-contest-manager-cli.git
-cd cp-contest-manager-cli
-npm install
+cpm workspace
 ```
 
-Run the tool locally:
+---
+
+### Development
+If you want to contribute or modify this tool:
+
+1. Install as [installation](#installation) guide above 
+2. Run the tool locally
 
 ```bash
-node index.js <command>
+npm start <command>
 ```
 
-## Contributing
-
-Contributions are welcome! If you have suggestions or improvements, feel free to submit a pull request or open an issue.
+---
 
 ## License
-
 This project is licensed under the Creative Commons Attribution-NonCommercial (CC BY-NC) License. See the [LICENSE](LICENSE) file for details.
 
+---
+
+## Contributing
+Contributions are welcome! Please feel free to submit a pull request or open an issue for any bugs or suggestions.
+
+---
+
 ## Acknowledgments
-
 This tool uses the following libraries:
-
 - [commander](https://www.npmjs.com/package/commander): For creating CLI commands.
 - [inquirer](https://www.npmjs.com/package/inquirer): For interactive prompts.
 - [inquirer-search-list](https://www.npmjs.com/package/inquirer-search-list): For searchable list prompts.
-- [chalk](https://www.npmjs.com/package/chalk): For styling console outputs with colors.
+- [colors](https://www.npmjs.com/package/colors): For styling console outputs with colors.
 - [cli-table](https://www.npmjs.com/package/cli-table): For displaying tabular data in the console.
+- [app-root-path](https://www.npmjs.com/package/app-root-path): For get the project root path
+- [fs-extra](https://www.npmjs.com/package/fs-extra): For more features than `fs` module
 
 ---
 
 This project is created and maintained by [Nourist](https://github.com/nourist). If you enjoy this tool, feel free to give it a star on GitHub or share it with others!
 
 Enjoy managing your contests with **cp-contest-manager**!
-
-[hodinhvys@gmail.com]
