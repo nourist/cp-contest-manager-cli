@@ -3,64 +3,14 @@ import path from 'path';
 
 import { getConfig } from './config.js';
 import { getData, updateData } from './data.js';
+import { getLastUpdate, getSources, exportSources } from './file.js';
 import cpp from '../template/cpp.js';
-
-export const getSources = (dir) => {
-	const items = fs.readdirSync(dir);
-
-	const res = [];
-
-	items.forEach((item) => {
-		const fullPath = path.join(dir, item);
-		const stats = fs.statSync(fullPath);
-		const ext = path.extname(item);
-
-		if (stats.isDirectory()) {
-			res.push(...getSources(fullPath));
-		} else if (
-			ext === '.cpp' ||
-			ext === '.c' ||
-			ext === '.py'
-		) {
-			res.push(path.basename(item, ext));
-		}
-	});
-
-	return res;
-};
-
-export const exportSources = (dir, dest) => {
-	const items = fs.readdirSync(dir);
-
-	items.forEach((item) => {
-		const fullPath = path.join(dir, item);
-		const stats = fs.statSync(fullPath);
-		const ext = path.extname(item);
-
-		if (stats.isDirectory()) {
-			exportSources(fullPath, dest);
-		} else if (
-			ext === '.cpp' ||
-			ext === '.c' ||
-			ext === '.py'
-		) {
-			fs.copyFileSync(
-				fullPath,
-				path.join(dest, item),
-			);
-		}
-	});
-};
 
 export const getProblems = (contest) => {
 	const { contestDir } = getConfig();
 
-	const problems = getSources(
-		path.join(contestDir, contest),
-	);
-	return problems.map((item) =>
-		path.basename(item, path.extname(item)),
-	);
+	const problems = getSources(path.join(contestDir, contest));
+	return problems.map((item) => path.basename(item, path.extname(item)));
 };
 
 export const getContest = (name) => {
@@ -75,10 +25,11 @@ export const getContest = (name) => {
 		name,
 		ac: ac[name] || false,
 		problems: getProblems(name),
+		lastUpdate: getLastUpdate(path.join(contestDir, name)),
 	};
 };
 
-export const getContests = ({ ac: acRequired = false }) => {
+export const getContests = ({ ac: acRequired = false } = {}) => {
 	const { contestDir } = getConfig();
 	const { ac } = getData();
 
@@ -100,6 +51,7 @@ export const getContests = ({ ac: acRequired = false }) => {
 			name: item,
 			ac: ac[item] || false,
 			problems: getProblems(item),
+			lastUpdate: getLastUpdate(path.join(contestDir, item)),
 		};
 	});
 };
@@ -107,7 +59,7 @@ export const getContests = ({ ac: acRequired = false }) => {
 export const createContest = (
 	name,
 	problems,
-	{ io = false, sub = false },
+	{ io = false, sub = false } = {},
 ) => {
 	const { contestDir } = getConfig();
 	const data = getData();
@@ -119,28 +71,16 @@ export const createContest = (
 		if (sub) {
 			fs.mkdirSync(path.join(contestPath, problem));
 			fs.writeFileSync(
-				path.join(
-					contestPath,
-					problem,
-					`${problem}.cpp`,
-				),
+				path.join(contestPath, problem, `${problem}.cpp`),
 				cpp.replace('{name}', problem),
 			);
 			if (io) {
 				fs.writeFileSync(
-					path.join(
-						contestPath,
-						problem,
-						`${problem}.inp`,
-					),
+					path.join(contestPath, problem, `${problem}.inp`),
 					'',
 				);
 				fs.writeFileSync(
-					path.join(
-						contestPath,
-						problem,
-						`${problem}.out`,
-					),
+					path.join(contestPath, problem, `${problem}.out`),
 					'',
 				);
 			}
@@ -151,17 +91,11 @@ export const createContest = (
 			);
 			if (io) {
 				fs.writeFileSync(
-					path.join(
-						contestPath,
-						`${problem}.inp`,
-					),
+					path.join(contestPath, `${problem}.inp`),
 					'',
 				);
 				fs.writeFileSync(
-					path.join(
-						contestPath,
-						`${problem}.out`,
-					),
+					path.join(contestPath, `${problem}.out`),
 					'',
 				);
 			}
@@ -177,7 +111,7 @@ export const deleteContest = (name) => {
 	const data = getData();
 
 	if (fs.pathExistsSync(path.join(contestDir, name))) {
-		fs.rmdirSync(path.join(contestDir, name), {
+		fs.rmSync(path.join(contestDir, name), {
 			recursive: true,
 		});
 	}
@@ -186,7 +120,7 @@ export const deleteContest = (name) => {
 	updateData(data);
 };
 
-export const markContest = (name, ac) => {
+export const markContest = (name, ac = true) => {
 	const data = getData();
 	data.ac[name] = ac;
 	updateData(data);

@@ -1,10 +1,7 @@
 import inquirer from 'inquirer';
 import fs from 'fs-extra';
 
-import {
-	getConfig,
-	updateConfig,
-} from '../utils/config.js';
+import { getConfig, updateConfig } from '../utils/config.js';
 
 export default async (str, options) => {
 	if (!options.content) {
@@ -27,8 +24,7 @@ export default async (str, options) => {
 			{
 				type: 'input',
 				name: 'path',
-				message:
-					'Enter the path of the contest directory:',
+				message: 'Enter the path of the contest directory:',
 				validate: (path) => {
 					if (fs.pathExistsSync(path)) {
 						return true;
@@ -43,4 +39,6 @@ export default async (str, options) => {
 	const config = getConfig();
 	config[options.content + 'Dir'] = str;
 	updateConfig(config);
+
+	console.log('Update config successfully'.success);
 };

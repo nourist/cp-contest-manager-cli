@@ -9,6 +9,10 @@ import { getConfig } from './utils/config.js';
 
 import config from './actions/config.js';
 import list from './actions/list.js';
+import create from './actions/create.js';
+import deleteC from './actions/delete.js';
+import mark from './actions/mark.js';
+import unmark from './actions/unmark.js';
 
 const program = new Command();
 
@@ -39,7 +43,7 @@ program.hook('preAction', (thisCommand, actionCommand) => {
 program
 	.command('config')
 	.description('Configure contest manager')
-	.argument('[path]')
+	.argument('[path]', 'Path to directory')
 	.addOption(
 		new Option(
 			'-c, --content <content>',
@@ -53,5 +57,30 @@ program
 	.description('List contests')
 	.option('-a, --ac', 'List only AC contests')
 	.action(list);
+
+program
+	.command('create')
+	.description('Create new contest')
+	.option('-s, --sub', 'Create sub-directory for each problem')
+	.option('-i, --io', 'Create input/output files for each problem')
+	.action(create);
+
+program
+	.command('delete')
+	.description('Delete contest')
+	.argument('[name]', 'Name of contest to delete')
+	.action(deleteC);
+
+program
+	.command('mark')
+	.description('Mark contest as ' + 'Complete'.bgGreen)
+	.argument('[name]', 'Name of contest to mark')
+	.action(mark);
+
+program
+	.command('unmark')
+	.description('Mark contest as ' + 'UnComplete'.bgRed)
+	.argument('[name]', 'Name of contest to unmark')
+	.action(unmark);
 
 program.parse(process.argv);

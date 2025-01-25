@@ -6,7 +6,7 @@ export default (options) => {
 	const contests = getContests({ ac: options.ac });
 
 	const table = new Table({
-		head: ['', 'Name', 'Problems'],
+		head: ['', 'Name', 'Problems', 'Last Update'],
 	});
 
 	table.push(
@@ -14,12 +14,13 @@ export default (options) => {
 			let res = [
 				index + 1,
 				contest.name,
-				`${contest.problems.length}: ${contest.problems.join(' ')}`,
+				`${
+					contest.problems.length
+				}: ${contest.problems.join(' ')}`,
+				new Date(contest.lastUpdate).toLocaleDateString(),
 			];
 			if (contest.ac) {
-				res = res.map(
-					(item) => toString(item).success,
-				);
+				res = res.map((item) => String(item).success);
 			}
 			return res;
 		}),

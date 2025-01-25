@@ -14,22 +14,12 @@ export const updateConfig = (config = configTemplate) => {
 
 export const getConfig = () => {
 	if (
-		!fs.existsSync(
-			path.join(
-				appRootPath.toString(),
-				configFileName,
-			),
-		)
+		!fs.existsSync(path.join(appRootPath.toString(), configFileName))
 	) {
 		updateConfig();
 	}
 
 	return JSON.parse(
-		fs.readFileSync(
-			path.join(
-				appRootPath.toString(),
-				configFileName,
-			),
-		),
+		fs.readFileSync(path.join(appRootPath.toString(), configFileName)),
 	);
 };
