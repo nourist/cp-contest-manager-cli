@@ -24,7 +24,7 @@ export default async (str, options) => {
 			{
 				type: 'input',
 				name: 'path',
-				message: 'Enter the path of the contest directory:',
+				message: `Enter the path of the ${options.content} directory:`,
 				validate: (path) => {
 					if (fs.pathExistsSync(path)) {
 						return true;

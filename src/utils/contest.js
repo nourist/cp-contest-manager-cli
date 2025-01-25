@@ -157,7 +157,9 @@ export const exportContest = (name) => {
 	const { contestDir, exportDir } = getConfig();
 
 	if (fs.pathExistsSync(path.join(contestDir, name))) {
-		fs.mkdirSync(path.join(exportDir, name));
+		if (!fs.pathExistsSync(path.join(exportDir, name))) {
+			fs.mkdirSync(path.join(exportDir, name));
+		}
 		exportSources(
 			path.join(contestDir, name),
 			path.join(exportDir, name),

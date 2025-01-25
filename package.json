@@ -8,7 +8,7 @@
 		"start": "node ./src/index.js"
 	},
 	"bin": {
-		"pm": "./src/index.js"
+		"cpm": "./src/index.js"
 	},
 	"author": "nourist",
 	"license": "CC-BY-NC-4.0",

@@ -15,6 +15,7 @@ import mark from './actions/mark.js';
 import unmark from './actions/unmark.js';
 import rename from './actions/rename.js';
 import open from './actions/open.js';
+import exportC from './actions/export.js';
 
 const program = new Command();
 
@@ -98,5 +99,13 @@ program
 	.description('Open contest directory in ' + 'VScode'.bgCyan)
 	.argument('[name]')
 	.action(open);
+
+program
+	.command('export')
+	.description('Export contests for easy sharing')
+	.option('-a, --all', 'Export all contests')
+	.option('-c, --ac', 'Export only complete contest')
+	.argument('[name]', 'Name of contest to export')
+	.action(exportC);
 
 program.parse(process.argv);
