@@ -77,7 +77,7 @@ export const createContest = (
 			fs.mkdirSync(path.join(contestPath, problem));
 			fs.writeFileSync(
 				path.join(contestPath, problem, `${problem}.cpp`),
-				cpp.replace('{name}', problem),
+				cpp.replaceAll('{name}', problem),
 			);
 			if (io) {
 				fs.writeFileSync(
@@ -92,7 +92,7 @@ export const createContest = (
 		} else {
 			fs.writeFileSync(
 				path.join(contestPath, `${problem}.cpp`),
-				cpp.replace('{name}', problem),
+				cpp.replaceAll('{name}', problem),
 			);
 			if (io) {
 				fs.writeFileSync(
