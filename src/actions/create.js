@@ -12,7 +12,7 @@ export default async (options) => {
 				if (!value) {
 					return 'Please enter contest name';
 				}
-				if (!value.match(/^[a-zA-Z0-9]+$/)) {
+				if (!value.match(/^[a-zA-Z0-9-]+$/)) {
 					return 'Please enter valid contest name';
 				}
 				if (getContest(value)) {

@@ -13,7 +13,7 @@ export default async (options) => {
 	}
 	if (
 		options.newname &&
-		!RegExp(/^[a-zA-Z0-9_]+$/).test(options.newname)
+		!RegExp(/^[a-zA-Z0-9-]+$/).test(options.newname)
 	) {
 		console.log('Please enter valid contest name'.error);
 		return;
@@ -40,7 +40,7 @@ export default async (options) => {
 					if (!value) {
 						return 'Please enter contest name';
 					}
-					if (!value.match(/^[a-zA-Z0-9_]+$/)) {
+					if (!value.match(/^[a-zA-Z0-9-]+$/)) {
 						return 'Please enter valid contest name';
 					}
 					if (getContest(value)) {
