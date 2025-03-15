@@ -34,7 +34,7 @@ export default async (options) => {
 				if (
 					!value
 						.split(' ')
-						.every((v) => v.match(/^[a-zA-Z0-9]+$/))
+						.every((v) => v.match(/^[a-zA-Z0-9_]+$/))
 				) {
 					return 'Please enter valid problem names';
 				}
