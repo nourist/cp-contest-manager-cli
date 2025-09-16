@@ -1,184 +1,227 @@
-# Competitive Programming Contest Manager (CPM)
+Competitive Programming Contest Manager (CPM)
 
-`cpm` is a CLI tool designed to manage and organize solutions for competitive programming contests. `It acts as a centralized repository for storing, accessing, and sharing solutions, helping you efficiently manage your contest work.`
+cpm is a CLI tool designed to manage and organize solutions for competitive programming contests.
+It acts as a centralized repository for storing, accessing, and sharing solutions, helping you efficiently manage your contest work.
 
-## Features
-- **Configuration**: Set up and manage your contest directory.
-- **Listing**: View contests with options to filter by completion status.
-- **Creation**: Create new contests with optional sub-directories and input/output files for problems.
-- **Deletion**: Remove contests from the repository.
-- **Marking**: Mark contests as complete or incomplete.
-- **Renaming**: Rename contests for better organization.
-- **Opening**: Open contest directories directly in VS Code.
-- **Exporting**: Share your contest solutions easily by exporting them.
-- **Workspace**: Open the entire contest directory workspace in VS Code.
+Unlike traditional OJ tools, CPM does not run or check code. Instead, it focuses on organizing, marking, and exporting your solutions with clean structure and metadata.
 
----
+✨ Features
+📂 Contest & Problem Management
 
-## Installation
+Initialize Contest: Create a new contest folder with default structure.
 
-1. Ensure you have [Node.js](https://nodejs.org/) installed on your system.
-2. Clone this repository or download the source code.
+Add Problem: Create problem folders and solution files from language templates.
 
-	```bash
-	git clone https://github.com/nourist/cp-contest-manager-cli.git
-	```
-3. Navigate to the project directory
+Flexible Structure:
 
-	```bash
-	cd cp-contest-manager-cli
-	``` 
-4. Run the following command to install dependencies:
+Nested mode: each problem has its own subfolder in code/ and filenames follow problem id.
 
-   ```bash
-   npm install
-   ```
-5. Make the CLI tool globally accessible:
+Flat mode: all problem files stay directly inside code/.
 
-   ```bash
-   npm i -g .
-   ```
+Resource Management: Keep statements, editorial, and sample files inside resources/.
 
-Now you can use `cpm` from anywhere in your terminal.
+Local Testing Folder: Each contest has a test/ folder (ignored in git) for user-side testing.
 
----
+✅ Metadata & Status
 
-## Usage
+Marking: Mark problems as AC, WIP, or other statuses.
 
-### General Command Format
-```bash
+Listing: View contests and their status.
+
+Renaming: Rename contests for better organization.
+
+Workspace: Open the whole contest or all contests in editor (e.g. VS Code).
+
+📦 Exporting
+
+Export contest for easy sharing:
+
+Code only
+
+Resources only
+
+Entire contest
+
+🎨 Templates
+
+Language-specific templates stored globally in templates/.
+
+Editable with command:
+
+cpm template edit <lang>
+
+🔧 Configuration
+
+Global config stored at workspace root (config.json):
+
+{
+  "defaultLanguage": "cpp",
+  "editor": "code",
+  "gitIntegration": true,
+  "defaultMode": "nested"
+}
+
+
+Contest config stored inside .oj/config.json:
+
+{
+  "name": "Contest ABC",
+  "date": "2025-09-16",
+  "mode": "nested",
+  "problems": [
+    { "id": "a", "title": "Problem A", "status": "AC" },
+    { "id": "b", "title": "Problem B", "status": "WIP" }
+  ]
+}
+
+🔄 Git Integration
+
+Initialize and manage git repo across contests.
+
+Useful for version control of all solutions:
+
+cpm git init
+cpm git commit -m "Solved A"
+
+📂 Folder Structure
+Workspace Root
+workspace-root/
+├── contests/
+│   ├── contest-1/
+│   └── contest-2/
+├── templates/
+│   ├── cpp/
+│   │   └── main.cpp
+│   ├── python/
+│   │   └── main.py
+│   └── ...
+└── config.json
+
+Contest (Nested Mode)
+contest-abc/
+├── .oj/
+│   └── config.json
+├── code/
+│   ├── problem-a/
+│   │   ├── a.cpp
+│   │   └── a.py
+│   └── problem-b/
+│       └── b.cpp
+├── resources/
+│   ├── statement.md
+│   ├── editorial.pdf
+│   └── samples/
+│       ├── 1.in
+│       └── 1.out
+├── test/                # ignored by git
+└── README.md
+
+Contest (Flat Mode)
+contest-abc/
+├── .oj/
+│   └── config.json
+├── code/
+│   ├── a.cpp
+│   ├── b.cpp
+│   └── ...
+├── resources/
+├── test/
+└── README.md
+
+⚙️ Installation
+
+Ensure you have Node.js
+ installed.
+
+Clone the repository:
+
+git clone https://github.com/yourname/cpm.git
+cd cpm
+
+
+Install dependencies:
+
+npm install
+
+
+Make the CLI tool globally accessible:
+
+npm i -g .
+
+
+Now you can use cpm from anywhere in your terminal.
+
+🚀 Usage
+General Command Format
 cpm <command> [options]
-```
 
-### Available Commands
+Commands
+config
 
-#### `config`
 Configure the contest manager.
 
-```bash
-cpm config [path] [options]
-```
-- **Path**: Specify the directory for storing/exporting contest solutions.
-- **Options**:
-  - `-c, --content <content>`: Configure specific content. Choices:
-    - `contest`: Path to store contests.
-    - `export`: Path to export contests.
+cpm config
 
-#### `list`
+list
+
 List all contests.
 
-```bash
-cpm list [options]
-```
-- **Options**:
-  - `-a, --ac`: List only completed (AC) contests.
+cpm list
 
-#### `create`
+init
+
 Create a new contest.
 
-```bash
-cpm create [options]
-```
-- **Options**:
-  - `-s, --sub`: Create sub-directories for each problem.
-  - `-i, --io`: Create input/output files for each problem.
+cpm init "Contest ABC"
 
-#### `delete`
-Delete a contest.
+problem add
 
-```bash
-cpm delete [name]
-```
-- **Name**: Specify the name of the contest to delete.
+Add a problem to a contest.
 
-#### `mark`
-Mark a contest as complete.
+cpm problem add A
 
-```bash
-cpm mark [name]
-```
-- **Name**: Specify the name of the contest to mark.
+mark
 
-#### `unmark`
-Mark a contest as incomplete.
+Mark a problem as complete (AC).
 
-```bash
-cpm unmark [name]
-```
-- **Name**: Specify the name of the contest to unmark.
+cpm mark A AC
 
-#### `rename`
+rename
+
 Rename a contest.
 
-```bash
-cpm rename [options]
-```
-- **Options**:
-  - `-o, --oldname <oldname>`: The current name of the contest.
-  - `-n, --newname <newname>`: The new name for the contest.
+cpm rename -o old-name -n new-name
 
-#### `open`
+open
+
 Open a contest directory in VS Code.
 
-```bash
-cpm open [name]
-```
-- **Name**: Specify the name of the contest to open.
+cpm open contest-abc
 
-#### `export`
-Export contests for easy sharing.
+export
 
-```bash
-cpm export [name] [options]
-```
-- **Name**: Specify the name of the contest to export.
-- **Options**:
-  - `-a, --all`: Export all contests.
-  - `-c, --ac`: Export only completed contests.
+Export contest.
 
-#### `workspace`
-Open the folder containing all contests in VS Code.
+cpm export contest-abc --only code
+cpm export contest-abc --all
 
-```bash
-cpm workspace
-```
+template
 
----
+Edit language template.
 
-### Development
-If you want to contribute or modify this tool:
+cpm template edit cpp
 
-1. Install as [installation](#installation) guide above 
-2. Run the tool locally
+git
 
-```bash
-npm start <command>
-```
+Initialize or commit with git.
 
----
+cpm git init
+cpm git commit -m "Solved problem A"
 
-## License
-This project is licensed under the Creative Commons Attribution-NonCommercial (CC BY-NC) License. See the [LICENSE](LICENSE) file for details.
+📜 License
 
----
+This project is licensed under the Creative Commons Attribution-NonCommercial (CC BY-NC) License.
 
-## Contributing
-Contributions are welcome! Please feel free to submit a pull request or open an issue for any bugs or suggestions.
+🤝 Contributing
 
----
-
-## Acknowledgments
-This tool uses the following libraries:
-- [commander](https://www.npmjs.com/package/commander): For creating CLI commands.
-- [inquirer](https://www.npmjs.com/package/inquirer): For interactive prompts.
-- [inquirer-search-list](https://www.npmjs.com/package/inquirer-search-list): For searchable list prompts.
-- [colors](https://www.npmjs.com/package/colors): For styling console outputs with colors.
-- [cli-table](https://www.npmjs.com/package/cli-table): For displaying tabular data in the console.
-- [app-root-path](https://www.npmjs.com/package/app-root-path): For get the project root path
-- [fs-extra](https://www.npmjs.com/package/fs-extra): For more features than `fs` module
-
----
-
-This project is created and maintained by [Nourist](https://github.com/nourist). If you enjoy this tool, feel free to give it a star on GitHub or share it with others!
-
-Enjoy managing your contests with **cp-contest-manager**!
+Contributions are welcome! Please feel free to submit PRs or open issues for bugs or suggestions.
