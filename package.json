@@ -1,0 +1,36 @@
+{
+	"name": "cp-contest-manager-cli",
+	"version": "1.0.0",
+	"description": "Competitive Programming Contest Manager (CPM)",
+	"main": "src/index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "node ./src/index.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/nourist/cp-contest-manager-cli.git"
+	},
+	"bin": {
+		"cpm": "./src/index.js"
+	},
+	"author": "",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/nourist/cp-contest-manager-cli/issues"
+	},
+	"homepage": "https://github.com/nourist/cp-contest-manager-cli#readme",
+	"dependencies": {
+		"cli-table": "^0.3.11",
+		"colors": "^1.4.0",
+		"commander": "^14.0.1",
+		"env-paths": "^3.0.0",
+		"inquirer": "^12.9.6",
+		"inquirer-search-list": "^1.2.6",
+		"uuid": "^13.0.0"
+	},
+	"devDependencies": {
+		"@trivago/prettier-plugin-sort-imports": "^5.2.2",
+		"prettier": "^3.6.2"
+	}
+}
