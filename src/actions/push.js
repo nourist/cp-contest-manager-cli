@@ -23,10 +23,12 @@ export default (message) => {
 			return;
 		}
 
-		if (!statusOutput.trim()) {
+		if (!statusOutput || !statusOutput.trim()) {
 			console.log('No changes to commit.'.yellow);
 		} else {
-			const lines = statusOutput.trim().split(/\r?\n/);
+			const lines = statusOutput
+				.split(/\r?\n/)
+				.filter((line) => line.length > 0);
 			const contestChanges = new Set();
 			const rootFiles = new Set();
 

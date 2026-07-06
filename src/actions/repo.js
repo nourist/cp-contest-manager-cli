@@ -12,17 +12,23 @@ export default () => {
 	}
 
 	if (!fs.existsSync(path.join(contestDir, '.git'))) {
-		console.log('No Git repository linked yet. Use `cpm link <url>` to link one.'.yellow);
+		console.log(
+			'No Git repository linked yet. Use `cpm link <url>` to link one.'
+				.yellow,
+		);
 		return;
 	}
 
 	try {
 		const url = execSync('git remote get-url origin', {
 			cwd: contestDir,
-			encoding: 'utf8'
+			encoding: 'utf8',
 		}).trim();
 		console.log(`Currently linked repository: ` + url.bgMagenta);
 	} catch (error) {
-		console.log('Git repository initialized but no remote origin found. Use `cpm link <url>` to link one.'.yellow);
+		console.log(
+			'Git repository initialized but no remote origin found. Use `cpm link <url>` to link one.'
+				.yellow,
+		);
 	}
 };

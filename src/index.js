@@ -140,7 +140,9 @@ program
 
 program
 	.command('repo')
-	.description('Show currently linked ' + 'Git'.bgMagenta + ' repository')
+	.description(
+		'Show currently linked ' + 'Git'.bgMagenta + ' repository',
+	)
 	.action(repo);
 
 program

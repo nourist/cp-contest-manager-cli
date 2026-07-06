@@ -22,7 +22,10 @@ export const getContest = (name) => {
 	const { contestDir } = getConfig();
 	const { ac } = getData();
 
-	if (name === '.git' || !fs.pathExistsSync(path.join(contestDir, name))) {
+	if (
+		name === '.git' ||
+		!fs.pathExistsSync(path.join(contestDir, name))
+	) {
 		return null;
 	}
 
