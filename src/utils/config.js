@@ -2,7 +2,7 @@ import appRootPath from 'app-root-path';
 import fs from 'fs-extra';
 import path from 'path';
 
-export const configTemplate = { defaultLang: 'cpp' };
+export const configTemplate = { defaultLang: 'cpp', autoCommit: false };
 export const configFileName = 'config.json';
 
 export const updateConfig = (config = configTemplate) => {
@@ -25,6 +25,9 @@ export const getConfig = () => {
 	
 	if (!config.defaultLang) {
 		config.defaultLang = 'cpp';
+	}
+	if (config.autoCommit === undefined) {
+		config.autoCommit = false;
 	}
 	
 	return config;

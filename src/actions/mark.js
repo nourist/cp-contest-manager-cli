@@ -1,6 +1,7 @@
 import inquirer from 'inquirer';
 
 import { getContest, getContests, markContest } from '../utils/contest.js';
+import { autoCommitIfEnabled } from '../utils/git.js';
 
 export default async (str) => {
 	if (str && !getContest(str)) {
@@ -19,5 +20,6 @@ export default async (str) => {
 		str = ans.name;
 	}
 	markContest(str);
-	console.log(`Mark contest ${str} successfully`.success);
+	console.log(`Contest ${str} marked as AC`.success);
+	autoCommitIfEnabled(str);
 };

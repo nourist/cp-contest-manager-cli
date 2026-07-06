@@ -10,7 +10,7 @@ export default async (str, options) => {
 				type: 'list',
 				name: 'content',
 				message: 'What do you want to configure?',
-				choices: ['contest', 'export', 'defaultLang'],
+				choices: ['contest', 'export', 'defaultLang', 'autoCommit'],
 			},
 		]);
 		options.content = ans.content;
@@ -29,6 +29,22 @@ export default async (str, options) => {
 		}
 		const config = getConfig();
 		config.defaultLang = str.replace(/^\./, ''); // remove dot if any
+		updateConfig(config);
+		console.log('Update config successfully'.success);
+		return;
+	}
+
+	if (options.content === 'autoCommit') {
+		const ans = await inquirer.prompt([
+			{
+				type: 'confirm',
+				name: 'autoCommit',
+				message: 'Do you want to enable auto-commit when marking a problem/contest as AC?',
+				default: getConfig().autoCommit
+			}
+		]);
+		const config = getConfig();
+		config.autoCommit = ans.autoCommit;
 		updateConfig(config);
 		console.log('Update config successfully'.success);
 		return;

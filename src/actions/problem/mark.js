@@ -1,6 +1,7 @@
 import inquirer from 'inquirer';
 import { getContests, getContest } from '../../utils/contest.js';
 import { markProblems } from '../../utils/problem.js';
+import { autoCommitIfEnabled } from '../../utils/git.js';
 
 export default async (contestName) => {
     let str = contestName;
@@ -39,4 +40,5 @@ export default async (contestName) => {
 
     markProblems(str, contest.problems, ans2.problems);
     console.log(`Problems updated successfully in ${str}`.success);
+    autoCommitIfEnabled(str, ans2.problems);
 };

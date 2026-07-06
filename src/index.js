@@ -68,7 +68,7 @@ program
 		new Option(
 			'-c, --content <content>',
 			'Content to configure',
-		).choices(['contest', 'export']),
+		).choices(['contest', 'export', 'defaultLang', 'autoCommit']),
 	)
 	.action(config);
 
