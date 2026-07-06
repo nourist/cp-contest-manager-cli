@@ -20,7 +20,9 @@ import workspace from './actions/workspace.js';
 import link from './actions/link.js';
 import push from './actions/push.js';
 import pull from './actions/pull.js';
-import template from './actions/template.js';
+import templateEdit from './actions/template/edit.js';
+import templateCreate from './actions/template/create.js';
+import templateDelete from './actions/template/delete.js';
 
 const program = new Command();
 
@@ -121,7 +123,7 @@ program
 program
 	.command('link')
 	.description('Link contest directory to a ' + 'Git'.bgMagenta + ' repository')
-	.argument('<url>', 'Git repository URL')
+	.argument('[url]', 'Git repository URL')
 	.action(link);
 
 program
@@ -135,9 +137,21 @@ program
 	.description('Pull from ' + 'Git'.bgMagenta)
 	.action(pull);
 
-program
-	.command('template')
-	.description('Open C++ template in ' + 'VScode'.bgCyan)
-	.action(template);
+const templateCmd = program.command('template').description('Manage templates');
+
+templateCmd
+	.command('edit [ext]')
+	.description('Edit a template')
+	.action(templateEdit);
+
+templateCmd
+	.command('create [ext]')
+	.description('Create a new template')
+	.action(templateCreate);
+
+templateCmd
+	.command('delete [ext]')
+	.description('Delete a template')
+	.action(templateDelete);
 
 program.parse(process.argv);

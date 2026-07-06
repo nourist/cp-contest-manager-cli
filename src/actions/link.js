@@ -2,9 +2,20 @@ import { execSync } from 'child_process';
 import { getConfig } from '../utils/config.js';
 import fs from 'fs-extra';
 import path from 'path';
+import inquirer from 'inquirer';
 
-export default (url) => {
+export default async (url) => {
 	const { contestDir } = getConfig();
+
+	if (!url) {
+		const ans = await inquirer.prompt([{
+			type: 'input',
+			name: 'url',
+			message: 'Enter Git repository URL:',
+			validate: (val) => val.trim() ? true : 'Please enter a valid URL'
+		}]);
+		url = ans.url.trim();
+	}
 
 	if (!fs.existsSync(contestDir)) {
 		console.log('Contest directory not found.'.error);

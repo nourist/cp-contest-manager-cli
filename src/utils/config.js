@@ -2,7 +2,7 @@ import appRootPath from 'app-root-path';
 import fs from 'fs-extra';
 import path from 'path';
 
-export const configTemplate = {};
+export const configTemplate = { defaultLang: 'cpp' };
 export const configFileName = 'config.json';
 
 export const updateConfig = (config = configTemplate) => {
@@ -19,7 +19,13 @@ export const getConfig = () => {
 		updateConfig();
 	}
 
-	return JSON.parse(
+	const config = JSON.parse(
 		fs.readFileSync(path.join(appRootPath.toString(), configFileName)),
 	);
+	
+	if (!config.defaultLang) {
+		config.defaultLang = 'cpp';
+	}
+	
+	return config;
 };

@@ -69,41 +69,53 @@ export const createContest = (
 	const { contestDir } = getConfig();
 	const data = getData();
 
-	const cppTemplatePath = path.join(appRootPath.toString(), 'src', 'template', 'cpp.txt');
-	const cpp = fs.readFileSync(cppTemplatePath, 'utf-8');
-
 	const contestPath = path.join(contestDir, name);
 	fs.mkdirSync(contestPath);
 
 	problems.forEach((problem) => {
+		let ext = getConfig().defaultLang;
+		let problemName = problem;
+		if (problem.includes('.')) {
+			const parts = problem.split('.');
+			ext = parts.pop();
+			problemName = parts.join('.');
+		}
+
+		const extTemplatePath = path.join(appRootPath.toString(), 'src', 'template', `${ext}.txt`);
+		let content = '';
+		if (fs.existsSync(extTemplatePath)) {
+			content = fs.readFileSync(extTemplatePath, 'utf-8');
+		}
+		content = content.replaceAll('{name}', problemName);
+
 		if (sub) {
-			fs.mkdirSync(path.join(contestPath, problem));
+			fs.mkdirSync(path.join(contestPath, problemName));
 			fs.writeFileSync(
-				path.join(contestPath, problem, `${problem}.cpp`),
-				cpp.replaceAll('{name}', problem),
+				path.join(contestPath, problemName, `${problemName}.${ext}`),
+				content,
 			);
 			if (io) {
 				fs.writeFileSync(
-					path.join(contestPath, problem, `${problem}.inp`),
+					path.join(contestPath, problemName, `${problemName}.inp`),
 					'',
 				);
 				fs.writeFileSync(
-					path.join(contestPath, problem, `${problem}.out`),
+					path.join(contestPath, problemName, `${problemName}.out`),
 					'',
 				);
 			}
 		} else {
 			fs.writeFileSync(
-				path.join(contestPath, `${problem}.cpp`),
-				cpp.replaceAll('{name}', problem),
+				path.join(contestPath, `${problemName}.${ext}`),
+				content,
 			);
 			if (io) {
 				fs.writeFileSync(
-					path.join(contestPath, `${problem}.inp`),
+					path.join(contestPath, `${problemName}.inp`),
 					'',
 				);
 				fs.writeFileSync(
-					path.join(contestPath, `${problem}.out`),
+					path.join(contestPath, `${problemName}.out`),
 					'',
 				);
 			}

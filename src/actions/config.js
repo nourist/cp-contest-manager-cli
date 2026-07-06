@@ -10,11 +10,30 @@ export default async (str, options) => {
 				type: 'list',
 				name: 'content',
 				message: 'What do you want to configure?',
-				choices: ['contest', 'export'],
+				choices: ['contest', 'export', 'defaultLang'],
 			},
 		]);
 		options.content = ans.content;
 	}
+	
+	if (options.content === 'defaultLang') {
+		if (!str) {
+			const ans = await inquirer.prompt([
+				{
+					type: 'input',
+					name: 'lang',
+					message: 'Enter the default language extension (e.g. cpp, py, java):',
+				}
+			]);
+			str = ans.lang;
+		}
+		const config = getConfig();
+		config.defaultLang = str.replace(/^\./, ''); // remove dot if any
+		updateConfig(config);
+		console.log('Update config successfully'.success);
+		return;
+	}
+
 	if (str && !fs.pathExistsSync(str)) {
 		console.log("Path doesn't exist.".error);
 		return;
