@@ -1,4 +1,4 @@
-const template = `#include <bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
 
 #define FOR(i,l,r) for (int i = (l); i <= (r); ++i)
@@ -15,7 +15,7 @@ using namespace std;
 #define vll vector<pll>
 #define pb push_back
 #define all(v) (v).begin(), (v).end()
-#define endl '\\n'
+#define endl '\n'
 #define BIT(x, i) (((x) >> (i)) & 1)
 #define BIT_COUNT(x) __builtin_popcountll(x)
 #define LOWEST_BIT(x) __builtin_ctzll(x)
@@ -37,6 +37,3 @@ int main() {
 
 	
 }
-`;
-
-export default template;

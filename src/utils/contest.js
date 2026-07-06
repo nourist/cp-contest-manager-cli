@@ -9,7 +9,7 @@ import {
 	exportSources,
 	renameSources,
 } from './file.js';
-import cpp from '../template/cpp.js';
+import appRootPath from 'app-root-path';
 
 export const getProblems = (contest) => {
 	const { contestDir } = getConfig();
@@ -68,6 +68,9 @@ export const createContest = (
 ) => {
 	const { contestDir } = getConfig();
 	const data = getData();
+
+	const cppTemplatePath = path.join(appRootPath.toString(), 'src', 'template', 'cpp.txt');
+	const cpp = fs.readFileSync(cppTemplatePath, 'utf-8');
 
 	const contestPath = path.join(contestDir, name);
 	fs.mkdirSync(contestPath);

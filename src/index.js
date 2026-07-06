@@ -20,6 +20,7 @@ import workspace from './actions/workspace.js';
 import link from './actions/link.js';
 import push from './actions/push.js';
 import pull from './actions/pull.js';
+import template from './actions/template.js';
 
 const program = new Command();
 
@@ -133,5 +134,10 @@ program
 	.command('pull')
 	.description('Pull from ' + 'Git'.bgMagenta)
 	.action(pull);
+
+program
+	.command('template')
+	.description('Open C++ template in ' + 'VScode'.bgCyan)
+	.action(template);
 
 program.parse(process.argv);
