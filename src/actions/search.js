@@ -6,13 +6,13 @@ import { getProblemFilePath } from '../utils/problem.js';
 export default async () => {
 	const contests = getContests();
 	const allProblems = [];
-	
-	contests.forEach(contest => {
-		contest.problems.forEach(problem => {
+
+	contests.forEach((contest) => {
+		contest.problems.forEach((problem) => {
 			allProblems.push({
 				contest: contest.name,
 				problem: problem,
-				ac: contest.problemAc && contest.problemAc[problem]
+				ac: contest.problemAc && contest.problemAc[problem],
 			});
 		});
 	});
@@ -22,21 +22,31 @@ export default async () => {
 		return;
 	}
 
-	const choices = allProblems.map(p => ({
-		name: p.ac ? String(`${p.contest} / ${p.problem}`).success : `${p.contest} / ${p.problem}`,
-		value: p
+	const choices = allProblems.map((p) => ({
+		name: p.ac
+			? String(`${p.contest} / ${p.problem}`).success
+			: `${p.contest} / ${p.problem}`,
+		value: p,
 	}));
 
-	const ans = await inquirer.prompt([{
-		type: 'search-list',
-		name: 'selected',
-		message: 'Search and select a problem to open:',
-		choices: choices,
-	}]);
+	const ans = await inquirer.prompt([
+		{
+			type: 'search-list',
+			name: 'selected',
+			message: 'Search and select a problem to open:',
+			choices: choices,
+		},
+	]);
 
-	const filePath = getProblemFilePath(ans.selected.contest, ans.selected.problem);
+	const filePath = getProblemFilePath(
+		ans.selected.contest,
+		ans.selected.problem,
+	);
 	if (!filePath) {
-		console.log(`Could not find the source file for ${ans.selected.problem}`.error);
+		console.log(
+			`Could not find the source file for ${ans.selected.problem}`
+				.error,
+		);
 		return;
 	}
 
@@ -44,6 +54,9 @@ export default async () => {
 	try {
 		execSync(`code "${filePath}"`, { stdio: 'inherit' });
 	} catch (e) {
-		console.log('Failed to open VS Code. Is `code` command in your PATH?'.error);
+		console.log(
+			'Failed to open VS Code. Is `code` command in your PATH?'
+				.error,
+		);
 	}
 };

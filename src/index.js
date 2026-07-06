@@ -131,7 +131,9 @@ program
 
 program
 	.command('link')
-	.description('Link contest directory to a ' + 'Git'.bgMagenta + ' repository')
+	.description(
+		'Link contest directory to a ' + 'Git'.bgMagenta + ' repository',
+	)
 	.argument('[url]', 'Git repository URL')
 	.action(link);
 
@@ -151,7 +153,9 @@ program
 	.description('Global real-time search for problems')
 	.action(search);
 
-const templateCmd = program.command('template').description('Manage templates');
+const templateCmd = program
+	.command('template')
+	.description('Manage templates');
 
 templateCmd
 	.command('edit [ext]')
@@ -168,7 +172,9 @@ templateCmd
 	.description('Delete a template')
 	.action(templateDelete);
 
-const problemCmd = program.command('problem').description('Manage problems in a contest');
+const problemCmd = program
+	.command('problem')
+	.description('Manage problems in a contest');
 
 problemCmd
 	.command('add [contest]')

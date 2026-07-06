@@ -28,7 +28,8 @@ export const getContest = (name) => {
 
 	const problemAc = ac[name] || {};
 	const problemsList = getProblems(name);
-	const isAc = problemsList.length > 0 && problemsList.every((p) => problemAc[p]);
+	const isAc =
+		problemsList.length > 0 && problemsList.every((p) => problemAc[p]);
 
 	return {
 		name,
@@ -49,7 +50,9 @@ export const getContests = ({ ac: acRequired = false } = {}) => {
 		let isAc = false;
 		if (ac[item]) {
 			const problemsList = getProblems(item);
-			isAc = problemsList.length > 0 && problemsList.every((p) => ac[item][p]);
+			isAc =
+				problemsList.length > 0 &&
+				problemsList.every((p) => ac[item][p]);
 		}
 
 		if (acRequired && !isAc) {
@@ -65,8 +68,10 @@ export const getContests = ({ ac: acRequired = false } = {}) => {
 	return items.map((item) => {
 		const problemAc = ac[item] || {};
 		const problemsList = getProblems(item);
-		const isAc = problemsList.length > 0 && problemsList.every((p) => problemAc[p]);
-		
+		const isAc =
+			problemsList.length > 0 &&
+			problemsList.every((p) => problemAc[p]);
+
 		return {
 			name: item,
 			ac: isAc,
@@ -102,37 +107,68 @@ export const createContest = (
 		}
 		data.ac[name][problemName] = false;
 
-		const extTemplatePath = path.join(appRootPath.toString(), 'src', 'template', `${ext}.txt`);
+		const extTemplatePath = path.join(
+			appRootPath.toString(),
+			'src',
+			'template',
+			`${ext}.txt`,
+		);
 		let content = '';
 		if (fs.existsSync(extTemplatePath)) {
 			content = fs.readFileSync(extTemplatePath, 'utf-8');
 		}
 		content = content.replaceAll('{name}', problemName);
 
-		const testTemplatePath = path.join(appRootPath.toString(), 'src', 'template', `${ext}_test.txt`);
+		const testTemplatePath = path.join(
+			appRootPath.toString(),
+			'src',
+			'template',
+			`${ext}_test.txt`,
+		);
 		let testContent = '';
 		if (fs.existsSync(testTemplatePath)) {
 			testContent = fs.readFileSync(testTemplatePath, 'utf-8');
 		}
 		testContent = testContent.replaceAll('{name}', problemName);
 
-		fs.writeFileSync(path.join(testDir, `${problemName}_test.${ext}`), testContent);
-		fs.writeFileSync(path.join(testDir, `${problemName}_1.${ext}`), content);
-		fs.writeFileSync(path.join(testDir, `${problemName}_2.${ext}`), content);
+		fs.writeFileSync(
+			path.join(testDir, `${problemName}_test.${ext}`),
+			testContent,
+		);
+		fs.writeFileSync(
+			path.join(testDir, `${problemName}_1.${ext}`),
+			content,
+		);
+		fs.writeFileSync(
+			path.join(testDir, `${problemName}_2.${ext}`),
+			content,
+		);
 
 		if (sub) {
 			fs.mkdirSync(path.join(contestPath, problemName));
 			fs.writeFileSync(
-				path.join(contestPath, problemName, `${problemName}.${ext}`),
+				path.join(
+					contestPath,
+					problemName,
+					`${problemName}.${ext}`,
+				),
 				content,
 			);
 			if (io) {
 				fs.writeFileSync(
-					path.join(contestPath, problemName, `${problemName}.inp`),
+					path.join(
+						contestPath,
+						problemName,
+						`${problemName}.inp`,
+					),
 					'',
 				);
 				fs.writeFileSync(
-					path.join(contestPath, problemName, `${problemName}.out`),
+					path.join(
+						contestPath,
+						problemName,
+						`${problemName}.out`,
+					),
 					'',
 				);
 			}

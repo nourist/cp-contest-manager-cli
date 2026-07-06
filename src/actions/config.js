@@ -10,20 +10,26 @@ export default async (str, options) => {
 				type: 'list',
 				name: 'content',
 				message: 'What do you want to configure?',
-				choices: ['contest', 'export', 'defaultLang', 'autoCommit'],
+				choices: [
+					'contest',
+					'export',
+					'defaultLang',
+					'autoCommit',
+				],
 			},
 		]);
 		options.content = ans.content;
 	}
-	
+
 	if (options.content === 'defaultLang') {
 		if (!str) {
 			const ans = await inquirer.prompt([
 				{
 					type: 'input',
 					name: 'lang',
-					message: 'Enter the default language extension (e.g. cpp, py, java):',
-				}
+					message:
+						'Enter the default language extension (e.g. cpp, py, java):',
+				},
 			]);
 			str = ans.lang;
 		}
@@ -39,9 +45,10 @@ export default async (str, options) => {
 			{
 				type: 'confirm',
 				name: 'autoCommit',
-				message: 'Do you want to enable auto-commit when marking a problem/contest as AC?',
-				default: getConfig().autoCommit
-			}
+				message:
+					'Do you want to enable auto-commit when marking a problem/contest as AC?',
+				default: getConfig().autoCommit,
+			},
 		]);
 		const config = getConfig();
 		config.autoCommit = ans.autoCommit;

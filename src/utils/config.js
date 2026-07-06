@@ -22,13 +22,13 @@ export const getConfig = () => {
 	const config = JSON.parse(
 		fs.readFileSync(path.join(appRootPath.toString(), configFileName)),
 	);
-	
+
 	if (!config.defaultLang) {
 		config.defaultLang = 'cpp';
 	}
 	if (config.autoCommit === undefined) {
 		config.autoCommit = false;
 	}
-	
+
 	return config;
 };

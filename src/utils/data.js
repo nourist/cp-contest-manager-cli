@@ -34,7 +34,9 @@ export const getData = () => {
 			data.ac[contest] = {};
 			const contestPath = path.join(contestDir, contest);
 			if (fs.existsSync(contestPath)) {
-				const problems = getSources(contestPath).map(p => path.basename(p, path.extname(p)));
+				const problems = getSources(contestPath).map((p) =>
+					path.basename(p, path.extname(p)),
+				);
 				for (const p of problems) {
 					data.ac[contest][p] = oldStatus;
 				}
