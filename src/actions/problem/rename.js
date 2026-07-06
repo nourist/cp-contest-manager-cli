@@ -33,6 +33,9 @@ export default async (contestName) => {
 			message: 'Enter new name:',
 			validate: (input) => {
 				if (!input.trim()) return 'Name cannot be empty';
+				if (!input.match(/^[a-zA-Z0-9\-_\.]+$/)) {
+					return 'Please enter valid problem name';
+				}
 				if (contest.problems.includes(input.trim()))
 					return 'Name already exists';
 				return true;

@@ -8,11 +8,11 @@ export default async (options) => {
 			message: 'Enter contest name:',
 			name: 'name',
 			validate: (value) => {
-				value = value.trim();
+				value = value.trim().toLowerCase();
 				if (!value) {
 					return 'Please enter contest name';
 				}
-				if (!value.match(/^[a-zA-Z0-9-]+$/)) {
+				if (!value.match(/^[a-zA-Z0-9\-_]+$/)) {
 					return 'Please enter valid contest name';
 				}
 				if (getContest(value)) {
@@ -20,7 +20,7 @@ export default async (options) => {
 				}
 				return true;
 			},
-			filter: (value) => value.trim(),
+			filter: (value) => value.trim().toLowerCase(),
 		},
 		{
 			type: 'input',
@@ -34,7 +34,7 @@ export default async (options) => {
 				if (
 					!value
 						.split(' ')
-						.every((v) => v.match(/^[a-zA-Z0-9_\.]+$/))
+						.every((v) => v.match(/^[a-zA-Z0-9\-_\.]+$/))
 				) {
 					return 'Please enter valid problem names';
 				}

@@ -19,6 +19,7 @@ import exportC from './actions/export.js';
 import workspace from './actions/workspace.js';
 import link from './actions/link.js';
 import repo from './actions/repo.js';
+import stat from './actions/stat.js';
 import push from './actions/push.js';
 import pull from './actions/pull.js';
 import search from './actions/search.js';
@@ -144,6 +145,11 @@ program
 		'Show currently linked ' + 'Git'.bgMagenta + ' repository',
 	)
 	.action(repo);
+
+program
+	.command('stat')
+	.description('Show full statistics of all contests')
+	.action(stat);
 
 program
 	.command('push')

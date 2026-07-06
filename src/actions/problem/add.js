@@ -28,7 +28,7 @@ export default async (contestName, options) => {
 				if (
 					!value
 						.split(' ')
-						.every((v) => v.match(/^[a-zA-Z0-9_\.]+$/))
+						.every((v) => v.match(/^[a-zA-Z0-9\-_\.]+$/))
 				) {
 					return 'Please enter valid problem names';
 				}

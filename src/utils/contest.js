@@ -52,6 +52,10 @@ export const getContests = ({ ac: acRequired = false } = {}) => {
 	items = items.filter((item) => {
 		if (item === '.git') return false;
 
+		const fullPath = path.join(contestDir, item);
+		const stats = fs.statSync(fullPath);
+		if (!stats.isDirectory()) return false;
+
 		let isAc = false;
 		if (ac[item]) {
 			const problemsList = getProblems(item);
@@ -64,10 +68,7 @@ export const getContests = ({ ac: acRequired = false } = {}) => {
 			return false;
 		}
 
-		const fullPath = path.join(contestDir, item);
-		const stats = fs.statSync(fullPath);
-
-		return stats.isDirectory();
+		return true;
 	});
 
 	return items.map((item) => {
@@ -233,8 +234,8 @@ export const renameContest = (oldName, newName) => {
 		);
 	}
 
-	data[newName] = data[oldName];
-	data[oldName] = undefined;
+	data.ac[newName] = data.ac[oldName];
+	delete data.ac[oldName];
 	updateData(data);
 };
 

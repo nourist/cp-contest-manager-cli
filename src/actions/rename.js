@@ -7,13 +7,16 @@ import {
 } from '../utils/contest.js';
 
 export default async (options) => {
+	if (options.oldname) options.oldname = options.oldname.trim().toLowerCase();
+	if (options.newname) options.newname = options.newname.trim().toLowerCase();
+
 	if (options.oldname && !getContest(options.oldname)) {
 		console.log(`Contest ${options.oldname} not found`.error);
 		return;
 	}
 	if (
 		options.newname &&
-		!RegExp(/^[a-zA-Z0-9-]+$/).test(options.newname)
+		!RegExp(/^[a-zA-Z0-9\-_]+$/).test(options.newname)
 	) {
 		console.log('Please enter valid contest name'.error);
 		return;
@@ -36,11 +39,11 @@ export default async (options) => {
 				message: 'Enter new contest name:',
 				name: 'newname',
 				validate: (value) => {
-					value = value.trim();
+					value = value.trim().toLowerCase();
 					if (!value) {
 						return 'Please enter contest name';
 					}
-					if (!value.match(/^[a-zA-Z0-9-]+$/)) {
+					if (!value.match(/^[a-zA-Z0-9\-_]+$/)) {
 						return 'Please enter valid contest name';
 					}
 					if (getContest(value)) {
@@ -48,7 +51,7 @@ export default async (options) => {
 					}
 					return true;
 				},
-				filter: (value) => value.trim(),
+				filter: (value) => value.trim().toLowerCase(),
 			},
 		]);
 		options.newname = ans.newname;
