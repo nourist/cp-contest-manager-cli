@@ -22,7 +22,7 @@ export const getContest = (name) => {
 	const { contestDir } = getConfig();
 	const { ac } = getData();
 
-	if (!fs.pathExistsSync(path.join(contestDir, name))) {
+	if (name === '.git' || !fs.pathExistsSync(path.join(contestDir, name))) {
 		return null;
 	}
 
@@ -47,6 +47,8 @@ export const getContests = ({ ac: acRequired = false } = {}) => {
 	let items = fs.readdirSync(contestDir);
 
 	items = items.filter((item) => {
+		if (item === '.git') return false;
+
 		let isAc = false;
 		if (ac[item]) {
 			const problemsList = getProblems(item);
