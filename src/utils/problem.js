@@ -114,3 +114,116 @@ export const markProblems = (contest, allProblems, selectedProblems) => {
 	});
 	updateData(data);
 };
+
+export const getProblemFilePath = (contest, problemName) => {
+	const { contestDir } = getConfig();
+	const contestPath = path.join(contestDir, contest);
+	const subDir = path.join(contestPath, problemName);
+	
+	if (fs.existsSync(subDir) && fs.statSync(subDir).isDirectory()) {
+		const files = fs.readdirSync(subDir);
+		const codeFile = files.find(f => f.startsWith(problemName + '.') && ['.cpp', '.c', '.py', '.java', '.js'].includes(path.extname(f)));
+		if (codeFile) return path.join(subDir, codeFile);
+	} else {
+		const files = fs.readdirSync(contestPath);
+		const codeFile = files.find(f => f.startsWith(problemName + '.') && ['.cpp', '.c', '.py', '.java', '.js'].includes(path.extname(f)));
+		if (codeFile) return path.join(contestPath, codeFile);
+	}
+	return null;
+};
+
+export const renameProblem = (contest, oldName, newName) => {
+	const { contestDir } = getConfig();
+	const data = getData();
+	const contestPath = path.join(contestDir, contest);
+	const testDir = path.join(contestPath, 'test');
+	
+	const subDir = path.join(contestPath, oldName);
+	if (fs.existsSync(subDir) && fs.statSync(subDir).isDirectory()) {
+		const newSubDir = path.join(contestPath, newName);
+		fs.renameSync(subDir, newSubDir);
+		const files = fs.readdirSync(newSubDir);
+		files.forEach(f => {
+			if (f.startsWith(oldName + '.')) {
+				const ext = path.extname(f);
+				fs.renameSync(path.join(newSubDir, f), path.join(newSubDir, newName + ext));
+			}
+		});
+	} else {
+		const files = fs.readdirSync(contestPath);
+		files.forEach(f => {
+			if (f === 'test') return;
+			if (f.startsWith(oldName + '.') && fs.statSync(path.join(contestPath, f)).isFile()) {
+				const ext = path.extname(f);
+				fs.renameSync(path.join(contestPath, f), path.join(contestPath, newName + ext));
+			}
+		});
+	}
+
+	if (fs.existsSync(testDir)) {
+		const files = fs.readdirSync(testDir);
+		files.forEach(f => {
+			if (f.startsWith(oldName + '_') && fs.statSync(path.join(testDir, f)).isFile()) {
+				const suffix = f.substring(oldName.length);
+				fs.renameSync(path.join(testDir, f), path.join(testDir, newName + suffix));
+			}
+		});
+	}
+
+	if (data.ac[contest] && data.ac[contest][oldName] !== undefined) {
+		data.ac[contest][newName] = data.ac[contest][oldName];
+		delete data.ac[contest][oldName];
+		updateData(data);
+	}
+};
+
+export const moveProblem = (fromContest, toContest, problemName) => {
+	const { contestDir } = getConfig();
+	const data = getData();
+	
+	const fromPath = path.join(contestDir, fromContest);
+	const toPath = path.join(contestDir, toContest);
+	const fromTestDir = path.join(fromPath, 'test');
+	const toTestDir = path.join(toPath, 'test');
+	
+	if (!fs.existsSync(toTestDir)) fs.mkdirSync(toTestDir);
+
+	const subDirTo = path.join(toPath, problemName);
+	let existsInTarget = false;
+	if (fs.existsSync(subDirTo)) existsInTarget = true;
+	const filesInTo = fs.readdirSync(toPath);
+	if (filesInTo.some(f => f.startsWith(problemName + '.') && fs.statSync(path.join(toPath, f)).isFile())) existsInTarget = true;
+	
+	if (existsInTarget) {
+		throw new Error(`Problem ${problemName} already exists in ${toContest}`);
+	}
+
+	const subDirFrom = path.join(fromPath, problemName);
+	if (fs.existsSync(subDirFrom) && fs.statSync(subDirFrom).isDirectory()) {
+		fs.renameSync(subDirFrom, subDirTo);
+	} else {
+		const files = fs.readdirSync(fromPath);
+		files.forEach(f => {
+			if (f === 'test') return;
+			if (f.startsWith(problemName + '.') && fs.statSync(path.join(fromPath, f)).isFile()) {
+				fs.renameSync(path.join(fromPath, f), path.join(toPath, f));
+			}
+		});
+	}
+
+	if (fs.existsSync(fromTestDir)) {
+		const files = fs.readdirSync(fromTestDir);
+		files.forEach(f => {
+			if (f.startsWith(problemName + '_') && fs.statSync(path.join(fromTestDir, f)).isFile()) {
+				fs.renameSync(path.join(fromTestDir, f), path.join(toTestDir, f));
+			}
+		});
+	}
+
+	if (!data.ac[toContest]) data.ac[toContest] = {};
+	if (data.ac[fromContest] && data.ac[fromContest][problemName] !== undefined) {
+		data.ac[toContest][problemName] = data.ac[fromContest][problemName];
+		delete data.ac[fromContest][problemName];
+		updateData(data);
+	}
+};

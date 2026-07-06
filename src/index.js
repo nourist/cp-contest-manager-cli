@@ -20,6 +20,8 @@ import workspace from './actions/workspace.js';
 import link from './actions/link.js';
 import push from './actions/push.js';
 import pull from './actions/pull.js';
+import search from './actions/search.js';
+
 import templateEdit from './actions/template/edit.js';
 import templateCreate from './actions/template/create.js';
 import templateDelete from './actions/template/delete.js';
@@ -27,6 +29,9 @@ import templateDelete from './actions/template/delete.js';
 import problemAdd from './actions/problem/add.js';
 import problemDelete from './actions/problem/delete.js';
 import problemMark from './actions/problem/mark.js';
+import problemRename from './actions/problem/rename.js';
+import problemOpen from './actions/problem/open.js';
+import problemMove from './actions/problem/move.js';
 
 const program = new Command();
 
@@ -141,6 +146,11 @@ program
 	.description('Pull from ' + 'Git'.bgMagenta)
 	.action(pull);
 
+program
+	.command('search')
+	.description('Global real-time search for problems')
+	.action(search);
+
 const templateCmd = program.command('template').description('Manage templates');
 
 templateCmd
@@ -176,5 +186,20 @@ problemCmd
 	.command('mark [contest]')
 	.description('Mark problems as AC')
 	.action(problemMark);
+
+problemCmd
+	.command('rename [contest]')
+	.description('Rename a problem')
+	.action(problemRename);
+
+problemCmd
+	.command('open [contest]')
+	.description('Open a problem in VS Code')
+	.action(problemOpen);
+
+problemCmd
+	.command('move [contest]')
+	.description('Move a problem to another contest')
+	.action(problemMove);
 
 program.parse(process.argv);
