@@ -24,6 +24,10 @@ import templateEdit from './actions/template/edit.js';
 import templateCreate from './actions/template/create.js';
 import templateDelete from './actions/template/delete.js';
 
+import problemAdd from './actions/problem/add.js';
+import problemDelete from './actions/problem/delete.js';
+import problemMark from './actions/problem/mark.js';
+
 const program = new Command();
 
 program
@@ -153,5 +157,24 @@ templateCmd
 	.command('delete [ext]')
 	.description('Delete a template')
 	.action(templateDelete);
+
+const problemCmd = program.command('problem').description('Manage problems in a contest');
+
+problemCmd
+	.command('add [contest]')
+	.description('Add new problems to a contest')
+	.option('-s, --sub', 'Use sub directory for each problem')
+	.option('-i, --io', 'Create I/O files for each problem')
+	.action(problemAdd);
+
+problemCmd
+	.command('delete [contest]')
+	.description('Delete problems from a contest')
+	.action(problemDelete);
+
+problemCmd
+	.command('mark [contest]')
+	.description('Mark problems as AC')
+	.action(problemMark);
 
 program.parse(process.argv);

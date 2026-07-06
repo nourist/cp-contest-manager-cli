@@ -14,9 +14,7 @@ export default (options) => {
 			let res = [
 				index + 1,
 				contest.name,
-				`${
-					contest.problems.length
-				}: ${contest.problems.join(' ')}`,
+				`${contest.problems.length}: ` + contest.problems.map(p => (!contest.ac && contest.problemAc && contest.problemAc[p]) ? String(p).success : p).join(' '),
 				new Date(contest.lastUpdate).toLocaleDateString(),
 			];
 			if (contest.ac) {

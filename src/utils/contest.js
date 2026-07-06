@@ -26,10 +26,15 @@ export const getContest = (name) => {
 		return null;
 	}
 
+	const problemAc = ac[name] || {};
+	const problemsList = getProblems(name);
+	const isAc = problemsList.length > 0 && problemsList.every((p) => problemAc[p]);
+
 	return {
 		name,
-		ac: ac[name] || false,
-		problems: getProblems(name),
+		ac: isAc,
+		problemAc: problemAc,
+		problems: problemsList,
 		lastUpdate: getLastUpdate(path.join(contestDir, name)),
 	};
 };
@@ -41,7 +46,13 @@ export const getContests = ({ ac: acRequired = false } = {}) => {
 	let items = fs.readdirSync(contestDir);
 
 	items = items.filter((item) => {
-		if (acRequired && !ac[item]) {
+		let isAc = false;
+		if (ac[item]) {
+			const problemsList = getProblems(item);
+			isAc = problemsList.length > 0 && problemsList.every((p) => ac[item][p]);
+		}
+
+		if (acRequired && !isAc) {
 			return false;
 		}
 
@@ -52,10 +63,15 @@ export const getContests = ({ ac: acRequired = false } = {}) => {
 	});
 
 	return items.map((item) => {
+		const problemAc = ac[item] || {};
+		const problemsList = getProblems(item);
+		const isAc = problemsList.length > 0 && problemsList.every((p) => problemAc[p]);
+		
 		return {
 			name: item,
-			ac: ac[item] || false,
-			problems: getProblems(item),
+			ac: isAc,
+			problemAc: problemAc,
+			problems: problemsList,
 			lastUpdate: getLastUpdate(path.join(contestDir, item)),
 		};
 	});
@@ -72,6 +88,8 @@ export const createContest = (
 	const contestPath = path.join(contestDir, name);
 	fs.mkdirSync(contestPath);
 
+	data.ac[name] = {};
+
 	problems.forEach((problem) => {
 		let ext = getConfig().defaultLang;
 		let problemName = problem;
@@ -80,6 +98,7 @@ export const createContest = (
 			ext = parts.pop();
 			problemName = parts.join('.');
 		}
+		data.ac[name][problemName] = false;
 
 		const extTemplatePath = path.join(appRootPath.toString(), 'src', 'template', `${ext}.txt`);
 		let content = '';
@@ -122,7 +141,6 @@ export const createContest = (
 		}
 	});
 
-	data.ac[name] = false;
 	updateData(data);
 };
 
@@ -142,7 +160,11 @@ export const deleteContest = (name) => {
 
 export const markContest = (name, ac = true) => {
 	const data = getData();
-	data.ac[name] = ac;
+	if (!data.ac[name]) data.ac[name] = {};
+	const problems = getProblems(name);
+	problems.forEach((p) => {
+		data.ac[name][p] = ac;
+	});
 	updateData(data);
 };
 
