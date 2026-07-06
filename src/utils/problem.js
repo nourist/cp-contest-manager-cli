@@ -8,6 +8,8 @@ export const addProblems = (contest, problems, { io = false, sub = false } = {})
 	const { contestDir } = getConfig();
 	const data = getData();
 	const contestPath = path.join(contestDir, contest);
+	const testDir = path.join(contestPath, 'test');
+	if (!fs.existsSync(testDir)) fs.mkdirSync(testDir);
 
 	if (!data.ac[contest]) data.ac[contest] = {};
 
@@ -27,6 +29,17 @@ export const addProblems = (contest, problems, { io = false, sub = false } = {})
 			content = fs.readFileSync(extTemplatePath, 'utf-8');
 		}
 		content = content.replaceAll('{name}', problemName);
+
+		const testTemplatePath = path.join(appRootPath.toString(), 'src', 'template', `${ext}_test.txt`);
+		let testContent = '';
+		if (fs.existsSync(testTemplatePath)) {
+			testContent = fs.readFileSync(testTemplatePath, 'utf-8');
+		}
+		testContent = testContent.replaceAll('{name}', problemName);
+
+		fs.writeFileSync(path.join(testDir, `${problemName}_test.${ext}`), testContent);
+		fs.writeFileSync(path.join(testDir, `${problemName}_1.${ext}`), content);
+		fs.writeFileSync(path.join(testDir, `${problemName}_2.${ext}`), content);
 
 		if (sub) {
 			fs.mkdirSync(path.join(contestPath, problemName), { recursive: true });
@@ -57,6 +70,7 @@ export const deleteProblems = (contest, problems) => {
 	const { contestDir } = getConfig();
 	const data = getData();
 	const contestPath = path.join(contestDir, contest);
+	const testDir = path.join(contestPath, 'test');
 
 	problems.forEach((problemName) => {
 		// Try to delete both directory (sub) and file (non-sub)
@@ -74,6 +88,16 @@ export const deleteProblems = (contest, problems) => {
 				});
 			}
 		}
+
+		if (fs.existsSync(testDir)) {
+			const files = fs.readdirSync(testDir);
+			files.forEach(f => {
+				if (f.startsWith(problemName + '_') && fs.statSync(path.join(testDir, f)).isFile()) {
+					fs.unlinkSync(path.join(testDir, f));
+				}
+			});
+		}
+
 		if (data.ac[contest]) {
 			delete data.ac[contest][problemName];
 		}

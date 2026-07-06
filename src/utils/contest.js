@@ -87,6 +87,8 @@ export const createContest = (
 
 	const contestPath = path.join(contestDir, name);
 	fs.mkdirSync(contestPath);
+	const testDir = path.join(contestPath, 'test');
+	if (!fs.existsSync(testDir)) fs.mkdirSync(testDir);
 
 	data.ac[name] = {};
 
@@ -106,6 +108,17 @@ export const createContest = (
 			content = fs.readFileSync(extTemplatePath, 'utf-8');
 		}
 		content = content.replaceAll('{name}', problemName);
+
+		const testTemplatePath = path.join(appRootPath.toString(), 'src', 'template', `${ext}_test.txt`);
+		let testContent = '';
+		if (fs.existsSync(testTemplatePath)) {
+			testContent = fs.readFileSync(testTemplatePath, 'utf-8');
+		}
+		testContent = testContent.replaceAll('{name}', problemName);
+
+		fs.writeFileSync(path.join(testDir, `${problemName}_test.${ext}`), testContent);
+		fs.writeFileSync(path.join(testDir, `${problemName}_1.${ext}`), content);
+		fs.writeFileSync(path.join(testDir, `${problemName}_2.${ext}`), content);
 
 		if (sub) {
 			fs.mkdirSync(path.join(contestPath, problemName));
