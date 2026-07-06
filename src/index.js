@@ -18,6 +18,7 @@ import open from './actions/open.js';
 import exportC from './actions/export.js';
 import workspace from './actions/workspace.js';
 import link from './actions/link.js';
+import repo from './actions/repo.js';
 import push from './actions/push.js';
 import pull from './actions/pull.js';
 import search from './actions/search.js';
@@ -136,6 +137,11 @@ program
 	)
 	.argument('[url]', 'Git repository URL')
 	.action(link);
+
+program
+	.command('repo')
+	.description('Show currently linked ' + 'Git'.bgMagenta + ' repository')
+	.action(repo);
 
 program
 	.command('push')
