@@ -17,6 +17,9 @@ import rename from './actions/rename.js';
 import open from './actions/open.js';
 import exportC from './actions/export.js';
 import workspace from './actions/workspace.js';
+import link from './actions/link.js';
+import push from './actions/push.js';
+import pull from './actions/pull.js';
 
 const program = new Command();
 
@@ -113,5 +116,22 @@ program
 	.command('workspace')
 	.description('Open folder contains all contests in ' + 'VScode'.bgCyan)
 	.action(workspace);
+
+program
+	.command('link')
+	.description('Link contest directory to a ' + 'Git'.bgMagenta + ' repository')
+	.argument('<url>', 'Git repository URL')
+	.action(link);
+
+program
+	.command('push')
+	.description('Auto commit and push to ' + 'Git'.bgMagenta)
+	.argument('[message]', 'Commit message')
+	.action(push);
+
+program
+	.command('pull')
+	.description('Pull from ' + 'Git'.bgMagenta)
+	.action(pull);
 
 program.parse(process.argv);
