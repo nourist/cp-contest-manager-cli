@@ -23,8 +23,8 @@ void gen() {
 }
 
 void compile() {
-	system(("g++ -o " + NAME + "_1.exe " + NAME + "_1.cpp -std=c++17 -O2").c_str());
-	system(("g++ -o " + NAME + "_2.exe " + NAME + "_2.cpp -std=c++17 -O2").c_str());
+	system(("g++ -o " + NAME + "_1.exe ../" + NAME + ".cpp -std=c++17 -O2").c_str());
+	system(("g++ -o " + NAME + "_2.exe " + NAME + "_brute.cpp -std=c++17 -O2").c_str());
 }
 
 bool test() {

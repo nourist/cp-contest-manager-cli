@@ -142,11 +142,7 @@ export const createContest = (
 			testContent,
 		);
 		fs.writeFileSync(
-			path.join(testDir, `${problemName}_1.${ext}`),
-			content,
-		);
-		fs.writeFileSync(
-			path.join(testDir, `${problemName}_2.${ext}`),
+			path.join(testDir, `${problemName}_brute.${ext}`),
 			content,
 		);
 
