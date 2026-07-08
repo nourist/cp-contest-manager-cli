@@ -1,5 +1,7 @@
 import inquirer from 'inquirer';
 import { getContest, createContest } from '../utils/contest.js';
+import open from './open.js';
+import { getConfig } from '../utils/config.js';
 
 export default async (options) => {
 	const ans = await inquirer.prompt([
@@ -50,4 +52,9 @@ export default async (options) => {
 	});
 
 	console.log('Create contest successfully'.success);
+
+	const config = getConfig();
+	if (config.autoOpen) {
+		await open(ans.name);
+	}
 };

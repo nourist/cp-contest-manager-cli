@@ -11,10 +11,11 @@ export default async (str, options) => {
 				name: 'content',
 				message: 'What do you want to configure?',
 				choices: [
-					'contest',
-					'export',
+					'contestDir',
+					'exportDir',
 					'defaultLang',
 					'autoCommit',
+					'autoOpen',
 				],
 			},
 		]);
@@ -57,6 +58,23 @@ export default async (str, options) => {
 		return;
 	}
 
+	if (options.content === 'autoOpen') {
+		const ans = await inquirer.prompt([
+			{
+				type: 'confirm',
+				name: 'autoOpen',
+				message:
+					'Do you want to automatically open the contest directory when creating a new contest?',
+				default: getConfig().autoOpen,
+			},
+		]);
+		const config = getConfig();
+		config.autoOpen = ans.autoOpen;
+		updateConfig(config);
+		console.log('Update config successfully'.success);
+		return;
+	}
+
 	if (str && !fs.pathExistsSync(str)) {
 		console.log("Path doesn't exist.".error);
 		return;
@@ -66,7 +84,7 @@ export default async (str, options) => {
 			{
 				type: 'input',
 				name: 'path',
-				message: `Enter the path of the ${options.content} directory:`,
+				message: `Enter the path of the ${options.content}:`,
 				validate: (path) => {
 					if (fs.pathExistsSync(path)) {
 						return true;
@@ -79,7 +97,7 @@ export default async (str, options) => {
 	}
 
 	const config = getConfig();
-	config[options.content + 'Dir'] = str;
+	config[options.content] = str;
 	updateConfig(config);
 
 	console.log('Update config successfully'.success);
