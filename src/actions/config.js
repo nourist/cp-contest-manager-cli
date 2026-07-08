@@ -5,17 +5,18 @@ import { getConfig, updateConfig } from '../utils/config.js';
 
 export default async (str, options) => {
 	if (!options.content) {
+		const config = getConfig();
 		const ans = await inquirer.prompt([
 			{
 				type: 'list',
 				name: 'content',
 				message: 'What do you want to configure?',
 				choices: [
-					'contestDir',
-					'exportDir',
-					'defaultLang',
-					'autoCommit',
-					'autoOpen',
+					{ name: `contestDir (${config.contestDir || 'Not set'})`, value: 'contestDir' },
+					{ name: `exportDir (${config.exportDir || 'Not set'})`, value: 'exportDir' },
+					{ name: `defaultLang (${config.defaultLang || 'Not set'})`, value: 'defaultLang' },
+					{ name: `autoCommit (${config.autoCommit})`, value: 'autoCommit' },
+					{ name: `autoOpen (${config.autoOpen})`, value: 'autoOpen' },
 				],
 			},
 		]);
@@ -26,57 +27,73 @@ export default async (str, options) => {
 		if (!str) {
 			const ans = await inquirer.prompt([
 				{
-					type: 'input',
+					type: 'list',
 					name: 'lang',
-					message:
-						'Enter the default language extension (e.g. cpp, py, java):',
+					message: 'Select the default language extension:',
+					choices: ['cpp', 'py', 'java', 'js', 'Other (type manually)'],
 				},
 			]);
 			str = ans.lang;
+			if (str === 'Other (type manually)') {
+				const ans2 = await inquirer.prompt([
+					{
+						type: 'input',
+						name: 'lang',
+						message: 'Enter the default language extension (e.g. rs, go, c):',
+					},
+				]);
+				str = ans2.lang;
+			}
 		}
 		const config = getConfig();
 		config.defaultLang = str.replace(/^\./, ''); // remove dot if any
 		updateConfig(config);
-		console.log('Update config successfully'.success);
+		console.log('Update defaultLang successfully'.success);
 		return;
 	}
 
 	if (options.content === 'autoCommit') {
 		const ans = await inquirer.prompt([
 			{
-				type: 'confirm',
+				type: 'list',
 				name: 'autoCommit',
-				message:
-					'Do you want to enable auto-commit when marking a problem/contest as AC?',
-				default: getConfig().autoCommit,
+				message: 'Enable auto-commit when marking a problem/contest as AC?',
+				choices: [
+					{ name: 'Yes', value: true },
+					{ name: 'No', value: false },
+				],
+				default: getConfig().autoCommit ? 0 : 1,
 			},
 		]);
 		const config = getConfig();
 		config.autoCommit = ans.autoCommit;
 		updateConfig(config);
-		console.log('Update config successfully'.success);
+		console.log('Update autoCommit successfully'.success);
 		return;
 	}
 
 	if (options.content === 'autoOpen') {
 		const ans = await inquirer.prompt([
 			{
-				type: 'confirm',
+				type: 'list',
 				name: 'autoOpen',
-				message:
-					'Do you want to automatically open the contest directory when creating a new contest?',
-				default: getConfig().autoOpen,
+				message: 'Automatically open the contest directory when creating a new contest?',
+				choices: [
+					{ name: 'Yes', value: true },
+					{ name: 'No', value: false },
+				],
+				default: getConfig().autoOpen ? 0 : 1,
 			},
 		]);
 		const config = getConfig();
 		config.autoOpen = ans.autoOpen;
 		updateConfig(config);
-		console.log('Update config successfully'.success);
+		console.log('Update autoOpen successfully'.success);
 		return;
 	}
 
 	if (str && !fs.pathExistsSync(str)) {
-		console.log("Path doesn't exist.".error);
+		console.log(`Path doesn't exist for ${options.content}.`.error);
 		return;
 	}
 	if (!str) {
@@ -100,5 +117,5 @@ export default async (str, options) => {
 	config[options.content] = str;
 	updateConfig(config);
 
-	console.log('Update config successfully'.success);
+	console.log(`Update ${options.content} successfully`.success);
 };
