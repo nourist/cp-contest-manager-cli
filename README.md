@@ -1,6 +1,6 @@
 # Competitive Programming Contest Manager (CPM)
 
-`cpm` is a CLI tool designed to manage and organize solutions for competitive programming contests. `It acts as a centralized repository for storing, accessing, and sharing solutions, helping you efficiently manage your contest work.`
+`cpm` is a CLI tool designed to manage and organize solutions for competitive programming contests. It acts as a centralized repository for storing, accessing, and sharing solutions, helping you efficiently manage your contest work.
 
 ## Features
 - **Configuration**: Set up and manage your contest directory.
@@ -12,6 +12,11 @@
 - **Opening**: Open contest directories directly in VS Code.
 - **Exporting**: Share your contest solutions easily by exporting them.
 - **Workspace**: Open the entire contest directory workspace in VS Code.
+- **Git Integration**: Seamlessly link, push, and pull from a Git repository.
+- **Statistics**: View full statistics of all your contests.
+- **Template Management**: Create, edit, and delete templates for different file extensions.
+- **Problem Management**: Add, delete, mark, rename, open, and move individual problems.
+- **Search**: Global real-time full-text search across all your problem solutions.
 
 ---
 
@@ -54,19 +59,15 @@ cpm <command> [options]
 
 #### `config`
 Configure the contest manager.
-
 ```bash
 cpm config [path] [options]
 ```
 - **Path**: Specify the directory for storing/exporting contest solutions.
 - **Options**:
-  - `-c, --content <content>`: Configure specific content. Choices:
-    - `contest`: Path to store contests.
-    - `export`: Path to export contests.
+  - `-c, --content <content>`: Configure specific content. Choices: `contest`, `export`, `defaultLang`, `autoCommit`.
 
 #### `list`
 List all contests.
-
 ```bash
 cpm list [options]
 ```
@@ -75,7 +76,6 @@ cpm list [options]
 
 #### `create`
 Create a new contest.
-
 ```bash
 cpm create [options]
 ```
@@ -85,31 +85,20 @@ cpm create [options]
 
 #### `delete`
 Delete a contest.
-
 ```bash
 cpm delete [name]
 ```
 - **Name**: Specify the name of the contest to delete.
 
-#### `mark`
-Mark a contest as complete.
-
+#### `mark` / `unmark`
+Mark a contest as complete or incomplete.
 ```bash
 cpm mark [name]
-```
-- **Name**: Specify the name of the contest to mark.
-
-#### `unmark`
-Mark a contest as incomplete.
-
-```bash
 cpm unmark [name]
 ```
-- **Name**: Specify the name of the contest to unmark.
 
 #### `rename`
 Rename a contest.
-
 ```bash
 cpm rename [options]
 ```
@@ -117,9 +106,29 @@ cpm rename [options]
   - `-o, --oldname <oldname>`: The current name of the contest.
   - `-n, --newname <newname>`: The new name for the contest.
 
-#### `search`
-Search for a problem across all contests using full-text search.
+#### `open`
+Open a contest directory in VS Code.
+```bash
+cpm open [name]
+```
 
+#### `export`
+Export contests for easy sharing.
+```bash
+cpm export [name] [options]
+```
+- **Options**:
+  - `-a, --all`: Export all contests.
+  - `-c, --ac`: Export only completed contests.
+
+#### `workspace`
+Open the folder containing all contests in VS Code.
+```bash
+cpm workspace
+```
+
+#### `search`
+Global real-time full-text search for problems across all contests.
 ```bash
 cpm search [query]
 ```
@@ -130,31 +139,33 @@ cpm search [query]
   - Provides rich, color-highlighted multi-line code previews directly in the terminal, showing exactly where words were found.
   - Press Enter to instantly open the selected problem in VS Code.
 
-#### `open`
-Open a contest directory in VS Code.
+#### Git Integration Commands
+Manage your contest workspace via Git easily.
+- `cpm link [url]`: Link contest directory to a Git repository.
+- `cpm repo`: Show currently linked Git repository.
+- `cpm push [message]`: Auto commit and push to Git.
+- `cpm pull`: Pull latest changes from Git.
 
+#### `stat`
+Show full statistics of all your contests.
 ```bash
-cpm open [name]
+cpm stat
 ```
-- **Name**: Specify the name of the contest to open.
 
-#### `export`
-Export contests for easy sharing.
+#### `template`
+Manage coding templates.
+- `cpm template edit [ext]`: Edit an existing template.
+- `cpm template create [ext]`: Create a new template.
+- `cpm template delete [ext]`: Delete a template.
 
-```bash
-cpm export [name] [options]
-```
-- **Name**: Specify the name of the contest to export.
-- **Options**:
-  - `-a, --all`: Export all contests.
-  - `-c, --ac`: Export only completed contests.
-
-#### `workspace`
-Open the folder containing all contests in VS Code.
-
-```bash
-cpm workspace
-```
+#### `problem`
+Manage individual problems within a contest.
+- `cpm problem add [contest] [options]`: Add new problems to a contest (options: `-s` for sub-directories, `-i` for I/O files).
+- `cpm problem delete [contest]`: Delete problems from a contest.
+- `cpm problem mark [contest]`: Mark problems as AC.
+- `cpm problem rename [contest]`: Rename a problem.
+- `cpm problem open [contest]`: Open a problem in VS Code.
+- `cpm problem move [contest]`: Move a problem to another contest.
 
 ---
 
