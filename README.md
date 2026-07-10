@@ -117,6 +117,19 @@ cpm rename [options]
   - `-o, --oldname <oldname>`: The current name of the contest.
   - `-n, --newname <newname>`: The new name for the contest.
 
+#### `search`
+Search for a problem across all contests using full-text search.
+
+```bash
+cpm search [query]
+```
+- **Query**: Space-separated terms to search for in problem code or problem names.
+- **Features**: 
+  - Searches through the file content of all problems in the workspace.
+  - Prioritizes problems containing the most distinct matching terms.
+  - Provides rich, color-highlighted multi-line code previews directly in the terminal, showing exactly where words were found.
+  - Press Enter to instantly open the selected problem in VS Code.
+
 #### `open`
 Open a contest directory in VS Code.
 
@@ -152,7 +165,7 @@ If you want to contribute or modify this tool:
 2. Run the tool locally
 
 ```bash
-npm start <command>
+npm run start -- <command>
 ```
 
 ---
@@ -171,11 +184,11 @@ Contributions are welcome! Please feel free to submit a pull request or open an 
 This tool uses the following libraries:
 - [commander](https://www.npmjs.com/package/commander): For creating CLI commands.
 - [inquirer](https://www.npmjs.com/package/inquirer): For interactive prompts.
-- [inquirer-search-list](https://www.npmjs.com/package/inquirer-search-list): For searchable list prompts.
+- [@inquirer/prompts](https://www.npmjs.com/package/@inquirer/prompts): For advanced searchable list prompts and interactive UI.
 - [colors](https://www.npmjs.com/package/colors): For styling console outputs with colors.
-- [cli-table](https://www.npmjs.com/package/cli-table): For displaying tabular data in the console.
-- [app-root-path](https://www.npmjs.com/package/app-root-path): For get the project root path
-- [fs-extra](https://www.npmjs.com/package/fs-extra): For more features than `fs` module
+- [cli-table3](https://www.npmjs.com/package/cli-table3): For displaying tabular data in the console.
+- [app-root-path](https://www.npmjs.com/package/app-root-path): For get the project root path.
+- [fs-extra](https://www.npmjs.com/package/fs-extra): For more features than the standard `fs` module.
 
 ---
 
