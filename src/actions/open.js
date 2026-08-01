@@ -6,7 +6,7 @@ import { getConfig } from '../utils/config.js';
 import { getContest, getContests } from '../utils/contest.js';
 
 export default async (name) => {
-	const { contestDir } = getConfig();
+	const { contestDir, editor } = getConfig();
 
 	if (name && !getContest(name)) {
 		console.log(`Contest ${name} not found`.error);
@@ -23,6 +23,7 @@ export default async (name) => {
 		]);
 		name = ans.name;
 	}
-	exec(`code -r ${path.join(contestDir, name)}`);
+	const cmd = editor === 'zed' ? `zed ${path.join(contestDir, name)}` : `code -r ${path.join(contestDir, name)}`;
+	exec(cmd);
 	console.log(`Opening contest ${name}...`.info);
 };

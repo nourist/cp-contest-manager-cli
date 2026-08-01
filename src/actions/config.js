@@ -17,6 +17,7 @@ export default async (str, options) => {
 					{ name: `defaultLang (${config.defaultLang || 'Not set'})`, value: 'defaultLang' },
 					{ name: `autoCommit (${config.autoCommit})`, value: 'autoCommit' },
 					{ name: `autoOpen (${config.autoOpen})`, value: 'autoOpen' },
+					{ name: `editor (${config.editor})`, value: 'editor' },
 				],
 			},
 		]);
@@ -89,6 +90,26 @@ export default async (str, options) => {
 		config.autoOpen = ans.autoOpen;
 		updateConfig(config);
 		console.log('Update autoOpen successfully'.success);
+		return;
+	}
+
+	if (options.content === 'editor') {
+		const ans = await inquirer.prompt([
+			{
+				type: 'list',
+				name: 'editor',
+				message: 'Select the editor to use:',
+				choices: [
+					{ name: 'VS Code', value: 'vscode' },
+					{ name: 'Zed', value: 'zed' },
+				],
+				default: getConfig().editor === 'zed' ? 1 : 0,
+			},
+		]);
+		const config = getConfig();
+		config.editor = ans.editor;
+		updateConfig(config);
+		console.log('Update editor successfully'.success);
 		return;
 	}
 

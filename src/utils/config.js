@@ -2,7 +2,7 @@ import appRootPath from 'app-root-path';
 import fs from 'fs-extra';
 import path from 'path';
 
-export const configTemplate = { defaultLang: 'cpp', autoCommit: false, autoOpen: false };
+export const configTemplate = { defaultLang: 'cpp', autoCommit: false, autoOpen: false, editor: 'vscode' };
 export const configFileName = 'config.json';
 
 export const updateConfig = (config = configTemplate) => {
@@ -31,6 +31,9 @@ export const getConfig = () => {
 	}
 	if (config.autoOpen === undefined) {
 		config.autoOpen = false;
+	}
+	if (!config.editor) {
+		config.editor = 'vscode';
 	}
 
 	return config;

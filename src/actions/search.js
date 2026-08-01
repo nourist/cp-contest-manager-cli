@@ -3,6 +3,7 @@ import { execSync } from 'child_process';
 import fs from 'fs-extra';
 import { getContests } from '../utils/contest.js';
 import { getProblemFilePath } from '../utils/problem.js';
+import { getConfig } from '../utils/config.js';
 
 export default async () => {
 	const contests = getContests();
@@ -203,11 +204,13 @@ export default async () => {
 	}
 
 	console.log(`Opening ${selected.problem}...`.cyan);
+	const { editor } = getConfig();
 	try {
-		execSync(`code "${filePath}"`, { stdio: 'inherit' });
+		const cmd = editor === 'zed' ? `zed "${filePath}"` : `code "${filePath}"`;
+		execSync(cmd, { stdio: 'inherit' });
 	} catch (e) {
 		console.log(
-			'Failed to open VS Code. Is `code` command in your PATH?'
+			`Failed to open editor. Is \`${editor === 'zed' ? 'zed' : 'code'}\` command in your PATH?`
 				.error,
 		);
 	}

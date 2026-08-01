@@ -114,7 +114,7 @@ program
 
 program
 	.command('open')
-	.description('Open contest directory in ' + 'VScode'.bgCyan)
+	.description('Open contest directory in ' + 'editor'.bgCyan)
 	.argument('[name]')
 	.action(open);
 
@@ -128,7 +128,7 @@ program
 
 program
 	.command('workspace')
-	.description('Open folder contains all contests in ' + 'VScode'.bgCyan)
+	.description('Open folder contains all contests in ' + 'editor'.bgCyan)
 	.action(workspace);
 
 program
@@ -214,7 +214,7 @@ problemCmd
 
 problemCmd
 	.command('open [contest]')
-	.description('Open a problem in VS Code')
+	.description('Open a problem in editor')
 	.action(problemOpen);
 
 problemCmd
