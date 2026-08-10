@@ -21,18 +21,21 @@ export default () => {
 		}
 
 		if (!tagStats[tag]) {
-			tagStats[tag] = { total: 0, ac: 0 };
+			tagStats[tag] = { totalContests: 0, acContests: 0, totalProblems: 0, acProblems: 0 };
 		}
-		tagStats[tag].total++;
+		tagStats[tag].totalContests++;
 		if (contest.ac) {
 			acContests++;
-			tagStats[tag].ac++;
+			tagStats[tag].acContests++;
 		}
 
 		totalProblems += contest.problems.length;
 		
 		const solvedInContest = contest.problems.filter(p => contest.problemAc && contest.problemAc[p]).length;
 		acProblems += solvedInContest;
+
+		tagStats[tag].totalProblems += contest.problems.length;
+		tagStats[tag].acProblems += solvedInContest;
 	});
 
 	const incompleteContests = totalContests - acContests;
@@ -62,8 +65,8 @@ export default () => {
 	console.log(table.toString());
 
 	const tagTable = new Table({
-		head: ['Tag'.info, 'Total'.info, 'AC'.info, 'Rate'.info],
-		colWidths: [35, 10, 10, 15]
+		head: ['Tag'.info, 'Contest'.info, 'C. AC'.info, 'C. Rate'.info, 'Problem'.info, 'P. AC'.info, 'P. Rate'.info],
+		colWidths: [20, 11, 9, 11, 11, 9, 11]
 	});
 
 	// Sort tags alphabetically
@@ -71,18 +74,27 @@ export default () => {
 
 	for (const tag of sortedTags) {
 		const stat = tagStats[tag];
-		const rate = stat.total === 0 ? 0 : ((stat.ac / stat.total) * 100).toFixed(2);
+		const cRate = stat.totalContests === 0 ? 0 : ((stat.acContests / stat.totalContests) * 100).toFixed(2);
+		const pRate = stat.totalProblems === 0 ? 0 : ((stat.acProblems / stat.totalProblems) * 100).toFixed(2);
 		
-		let rateStr = `${rate}%`;
-		if (rate === '100.00') rateStr = rateStr.success;
-		else if (rate === '0.00') rateStr = rateStr.gray;
-		else rateStr = rateStr.warn;
+		let cRateStr = `${cRate}%`;
+		if (cRate === '100.00') cRateStr = cRateStr.success;
+		else if (cRate === '0.00') cRateStr = cRateStr.gray;
+		else cRateStr = cRateStr.warn;
+
+		let pRateStr = `${pRate}%`;
+		if (pRate === '100.00') pRateStr = pRateStr.success;
+		else if (pRate === '0.00') pRateStr = pRateStr.gray;
+		else pRateStr = pRateStr.warn;
 
 		tagTable.push([
 			tag === 'No tag' ? tag.gray : tag,
-			String(stat.total).bold,
-			String(stat.ac).success,
-			rateStr
+			String(stat.totalContests).bold,
+			String(stat.acContests).success,
+			cRateStr,
+			String(stat.totalProblems).bold,
+			String(stat.acProblems).success,
+			pRateStr
 		]);
 	}
 
