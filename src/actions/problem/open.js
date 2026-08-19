@@ -1,8 +1,7 @@
 import inquirer from 'inquirer';
-import { execSync } from 'child_process';
 import { getContests, getContest } from '../../utils/contest.js';
 import { getProblemFilePath } from '../../utils/problem.js';
-import { getConfig } from '../../utils/config.js';
+import { openEditorSync } from '../../utils/editor.js';
 
 export default async (contestName) => {
 	let str = contestName;
@@ -38,14 +37,6 @@ export default async (contestName) => {
 		return;
 	}
 	console.log(`Opening ${ans2.problem}...`.cyan);
-	const { editor } = getConfig();
-	try {
-		const cmd = editor === 'zed' ? `zed "${filePath}"` : `code "${filePath}"`;
-		execSync(cmd, { stdio: 'inherit' });
-	} catch (e) {
-		console.log(
-			`Failed to open editor. Is \`${editor === 'zed' ? 'zed' : 'code'}\` command in your PATH?`
-				.error,
-		);
-	}
+	openEditorSync(filePath);
 };
+

@@ -1,9 +1,8 @@
-import { execSync } from 'child_process';
 import path from 'path';
 import appRootPath from 'app-root-path';
 import fs from 'fs-extra';
 import inquirer from 'inquirer';
-import { getConfig } from '../../utils/config.js';
+import { openEditorSync } from '../../utils/editor.js';
 
 export default async (ext) => {
 	const templateDir = path.join(
@@ -43,15 +42,7 @@ export default async (ext) => {
 		return;
 	}
 
-	const { editor } = getConfig();
-	console.log(`Opening template file in ${editor}...`.cyan);
-	try {
-		const cmd = editor === 'zed' ? `zed "${templatePath}"` : `code "${templatePath}"`;
-		execSync(cmd, { stdio: 'inherit' });
-	} catch (e) {
-		console.log(
-			`Failed to open editor. Please make sure \`${editor === 'zed' ? 'zed' : 'code'}\` command is available in your PATH.`
-				.error,
-		);
-	}
+	console.log(`Opening template file...`.cyan);
+	openEditorSync(templatePath);
 };
+
