@@ -10,6 +10,9 @@
 	"bin": {
 		"cpm": "./src/index.js"
 	},
+	"files": [
+        "src"
+    ],
 	"author": "nourist",
 	"license": "CC-BY-NC-4.0",
 	"type": "module",
