@@ -1,6 +1,6 @@
 {
 	"name": "cp-contest-manager-cli",
-	"version": "2.0.0",
+	"version": "2.0.1",
 	"description": "A CLI tool makes you manage CP contest solution easier & more accurate",
 	"main": "src/index.js",
 	"scripts": {
@@ -11,8 +11,8 @@
 		"cpm": "./src/index.js"
 	},
 	"files": [
-        "src"
-    ],
+		"src"
+	],
 	"author": "nourist",
 	"license": "CC-BY-NC-4.0",
 	"type": "module",

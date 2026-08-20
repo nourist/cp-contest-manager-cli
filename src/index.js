@@ -48,11 +48,28 @@ program
 program.hook('preAction', (thisCommand, actionCommand) => {
 	const { contestDir } = getConfig();
 
+	// Commands that do not require contestDir to be configured
+	const noContestDirNeeded = ['config', 'help'];
+
+	// Check if this action or any of its ancestors is in the exempt list
+	// (e.g. 'template create', 'template edit', 'template delete' don't need contestDir)
+	const getParentNames = (cmd) => {
+		const names = [];
+		let cur = cmd;
+		while (cur && cur !== thisCommand) {
+			names.push(cur.name());
+			cur = cur.parent;
+		}
+		return names;
+	};
+
+	const cmdNames = getParentNames(actionCommand);
+
 	if (
 		!contestDir &&
-		actionCommand.name() !== 'config' &&
-		actionCommand.name() !== 'help' &&
-		actionCommand.name() !== thisCommand.name()
+		actionCommand.name() !== thisCommand.name() &&
+		!noContestDirNeeded.includes(actionCommand.name()) &&
+		!cmdNames.includes('template')
 	) {
 		console.log(
 			"You haven't configured the contest directory yet. \nPlease run `cpm config` to configure the contest directory."

@@ -27,7 +27,7 @@ export default async (options) => {
 				type: 'search-list',
 				name: 'oldname',
 				message: 'Select contest to rename:',
-				choices: getContests(),
+				choices: getContests().map((c) => c.name),
 			},
 		]);
 		options.oldname = ans.oldname;

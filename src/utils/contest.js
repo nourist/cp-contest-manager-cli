@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
 import path from 'path';
 
-import { getConfig } from './config.js';
+import { getConfig, getTemplateDir } from './config.js';
 import { getData, updateData } from './data.js';
 import {
 	getLastUpdate,
@@ -9,7 +9,6 @@ import {
 	exportSources,
 	renameSources,
 } from './file.js';
-import appRootPath from 'app-root-path';
 
 export const getProblems = (contest) => {
 	const { contestDir } = getConfig();
@@ -114,9 +113,7 @@ export const createContest = (
 		data.ac[name][problemName] = false;
 
 		const extTemplatePath = path.join(
-			appRootPath.toString(),
-			'src',
-			'template',
+			getTemplateDir(),
 			`${ext}.txt`,
 		);
 		let content = '';
@@ -126,9 +123,7 @@ export const createContest = (
 		content = content.replaceAll('{name}', problemName);
 
 		const testTemplatePath = path.join(
-			appRootPath.toString(),
-			'src',
-			'template',
+			getTemplateDir(),
 			`${ext}_test.txt`,
 		);
 		let testContent = '';

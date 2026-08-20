@@ -10,7 +10,7 @@ export default async (contestName) => {
 				type: 'search-list',
 				name: 'name',
 				message: 'Select source contest:',
-				choices: getContests(),
+				choices: getContests().map((c) => c.name),
 			},
 		]);
 		str = ans.name;
@@ -31,7 +31,7 @@ export default async (contestName) => {
 			type: 'search-list',
 			name: 'toContest',
 			message: 'Select destination contest:',
-			choices: getContests().filter((c) => c.name !== str),
+			choices: getContests().filter((c) => c.name !== str).map((c) => c.name),
 		},
 	]);
 	try {

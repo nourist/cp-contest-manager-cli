@@ -10,7 +10,7 @@ export default async (contestName) => {
 				type: 'search-list',
 				name: 'name',
 				message: 'Select contest to delete problems from:',
-				choices: getContests(),
+				choices: getContests().map((c) => c.name),
 			},
 		]);
 		str = ans.name;

@@ -1,7 +1,7 @@
-import appRootPath from 'app-root-path';
 import fs from 'fs-extra';
 import path from 'path';
 import os from 'os';
+import { fileURLToPath } from 'url';
 
 /**
  * Returns the cross-platform config directory for the app.
@@ -25,6 +25,38 @@ export const getConfigDir = () => {
 	return dir;
 };
 
+/**
+ * Returns the directory where user templates are stored.
+ * - Linux/macOS: ~/.config/cpm/templates/
+ * - Windows: %APPDATA%\cpm\templates\
+ * On first call, default templates (from package src/template/) are copied here
+ * if they don't already exist.
+ */
+export const getTemplateDir = () => {
+	const templateDir = path.join(getConfigDir(), 'templates');
+	fs.ensureDirSync(templateDir);
+
+	// Copy default templates bundled with the package on first-run
+	try {
+		const __filename = fileURLToPath(import.meta.url);
+		const __dirname = path.dirname(__filename);
+		const pkgTemplateDir = path.join(__dirname, '..', 'template');
+		if (fs.existsSync(pkgTemplateDir)) {
+			const defaults = fs.readdirSync(pkgTemplateDir);
+			defaults.forEach((file) => {
+				const dest = path.join(templateDir, file);
+				if (!fs.existsSync(dest)) {
+					fs.copyFileSync(path.join(pkgTemplateDir, file), dest);
+				}
+			});
+		}
+	} catch (_) {
+		// Non-fatal: if copy fails, user starts with empty template dir
+	}
+
+	return templateDir;
+};
+
 export const configTemplate = { defaultLang: 'cpp', autoCommit: false, autoOpen: false, editor: 'vscode' };
 export const configFileName = 'config.json';
 
@@ -38,18 +70,8 @@ export const updateConfig = (config = configTemplate) => {
 export const getConfig = () => {
 	const configPath = path.join(getConfigDir(), configFileName);
 
-	// Auto-migrate old config from package root (for users upgrading)
 	if (!fs.existsSync(configPath)) {
-		const oldConfigPath = path.join(appRootPath.toString(), configFileName);
-		if (fs.existsSync(oldConfigPath)) {
-			try {
-				fs.copySync(oldConfigPath, configPath);
-			} catch (_) {
-				updateConfig();
-			}
-		} else {
-			updateConfig();
-		}
+		updateConfig();
 	}
 
 	const config = JSON.parse(

@@ -1,15 +1,11 @@
 import path from 'path';
-import appRootPath from 'app-root-path';
 import fs from 'fs-extra';
 import inquirer from 'inquirer';
 import { openEditorSync } from '../../utils/editor.js';
+import { getTemplateDir } from '../../utils/config.js';
 
 export default async (ext) => {
-	const templateDir = path.join(
-		appRootPath.toString(),
-		'src',
-		'template',
-	);
+	const templateDir = getTemplateDir();
 
 	if (!ext) {
 		const files = fs

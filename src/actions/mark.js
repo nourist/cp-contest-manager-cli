@@ -14,7 +14,7 @@ export default async (str) => {
 				type: 'search-list',
 				name: 'name',
 				message: 'Select contest to mark:',
-				choices: getContests(),
+				choices: getContests().map((c) => c.name),
 			},
 		]);
 		str = ans.name;

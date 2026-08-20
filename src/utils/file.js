@@ -33,7 +33,13 @@ export const getSources = (dir) => {
 
 		if (stats.isDirectory()) {
 			res.push(...getSources(fullPath));
-		} else if (ext === '.cpp' || ext === '.c' || ext === '.py') {
+		} else if (
+			ext === '.cpp' ||
+			ext === '.c' ||
+			ext === '.py' ||
+			ext === '.java' ||
+			ext === '.js'
+		) {
 			res.push(path.basename(item, ext));
 		}
 	});
@@ -57,13 +63,20 @@ export const renameSources = (dir, oldName, newName) => {
 		}
 
 		if (stats.isDirectory()) {
-			renameSrouces(fullPath, oldName, newName);
-		} else if (ext === '.cpp' || ext === '.c' || ext === '.py') {
-			const content = fs.readFileSync(fullPath, 'utf-8');
+			renameSources(fullPath, oldName, newName);
+		} else if (
+			ext === '.cpp' ||
+			ext === '.c' ||
+			ext === '.py' ||
+			ext === '.java' ||
+			ext === '.js'
+		) {
+			let content = fs.readFileSync(fullPath, 'utf-8');
 			content = content.replaceAll(
-				new RegExp(oldName + '.', 'i'),
+				new RegExp(oldName + '\\.', 'g'),
 				newName + '.',
 			);
+			fs.writeFileSync(fullPath, content, 'utf-8');
 		}
 	});
 };
@@ -79,7 +92,13 @@ export const exportSources = (dir, dest) => {
 
 		if (stats.isDirectory()) {
 			exportSources(fullPath, dest);
-		} else if (ext === '.cpp' || ext === '.c' || ext === '.py') {
+		} else if (
+			ext === '.cpp' ||
+			ext === '.c' ||
+			ext === '.py' ||
+			ext === '.java' ||
+			ext === '.js'
+		) {
 			fs.copyFileSync(fullPath, path.join(dest, item));
 		}
 	});

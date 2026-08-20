@@ -18,7 +18,7 @@ export default async (name) => {
 				type: 'search-list',
 				name: 'name',
 				message: 'Select contest to open:',
-				choices: getContests(),
+				choices: getContests().map((c) => c.name),
 			},
 		]);
 		name = ans.name;

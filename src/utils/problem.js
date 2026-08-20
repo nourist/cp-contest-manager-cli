@@ -1,7 +1,6 @@
 import fs from 'fs-extra';
 import path from 'path';
-import appRootPath from 'app-root-path';
-import { getConfig } from './config.js';
+import { getConfig, getTemplateDir } from './config.js';
 import { getData, updateData } from './data.js';
 
 export const addProblems = (
@@ -28,9 +27,7 @@ export const addProblems = (
 		data.ac[contest][problemName] = false;
 
 		const extTemplatePath = path.join(
-			appRootPath.toString(),
-			'src',
-			'template',
+			getTemplateDir(),
 			`${ext}.txt`,
 		);
 		let content = '';
@@ -40,9 +37,7 @@ export const addProblems = (
 		content = content.replaceAll('{name}', problemName);
 
 		const testTemplatePath = path.join(
-			appRootPath.toString(),
-			'src',
-			'template',
+			getTemplateDir(),
 			`${ext}_test.txt`,
 		);
 		let testContent = '';
