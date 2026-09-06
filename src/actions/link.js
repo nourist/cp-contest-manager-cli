@@ -28,7 +28,7 @@ export default async (url) => {
 	try {
 		// Initialize git if not already
 		if (!fs.existsSync(path.join(contestDir, '.git'))) {
-			execSync('git init', { cwd: contestDir, stdio: 'inherit' });
+			execSync('git init -b main', { cwd: contestDir, stdio: 'inherit' });
 			console.log('Initialized empty Git repository.'.success);
 		}
 
