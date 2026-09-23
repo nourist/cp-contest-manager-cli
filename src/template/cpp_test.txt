@@ -12,7 +12,6 @@ int NTEST = 100;
 mt19937_64 rd(chrono::steady_clock::now().time_since_epoch().count());
 
 long long Rand(long long L, long long R) {
-	assert(L <= R);
 	return L + rd() % (R - L + 1);
 }
 
@@ -23,17 +22,25 @@ void gen() {
 }
 
 void compile() {
+	system(("g++ -o " + NAME + "_1.exe ../" + NAME + ".cpp -std=c++17 -O2").c_str());
+	system(("g++ -o " + NAME + "_2.exe " + NAME + "_brute.cpp -std=c++17 -O2").c_str());
+
 	// Linux: no .exe extension; use g++ with -o
-	system(("g++ -o " + NAME + "_1 ../" + NAME + ".cpp -std=c++17 -O2").c_str());
-	system(("g++ -o " + NAME + "_2 " + NAME + "_brute.cpp -std=c++17 -O2").c_str());
+	// system(("g++ -o " + NAME + "_1 ../" + NAME + ".cpp -std=c++17 -O2").c_str());
+	// system(("g++ -o " + NAME + "_2 " + NAME + "_brute.cpp -std=c++17 -O2").c_str());
 }
 
 bool test() {
-	system(("./" + NAME + "_1 < " + NAME + ".inp_ > " + NAME + ".out_1").c_str());
-	system(("./" + NAME + "_2 < " + NAME + ".inp_ > " + NAME + ".out_2").c_str());
+	system((NAME + "_1.exe < " + NAME + ".inp_ > " + NAME + ".out_1").c_str());
+	system((NAME + "_2.exe < " + NAME + ".inp_ > " + NAME + ".out_2").c_str());
+
+	return system(("fc " + NAME + ".out_1 " + NAME + ".out_2").c_str()) == 0;
+
+	// system(("./" + NAME + "_1 < " + NAME + ".inp_ > " + NAME + ".out_1").c_str());
+	// system(("./" + NAME + "_2 < " + NAME + ".inp_ > " + NAME + ".out_2").c_str());
 
 	// Use diff (Linux) instead of fc (Windows)
-	return system(("diff -q " + NAME + ".out_1 " + NAME + ".out_2 > /dev/null 2>&1").c_str()) == 0;
+	// return system(("diff -q " + NAME + ".out_1 " + NAME + ".out_2 > /dev/null 2>&1").c_str()) == 0;
 }
 
 int main() {
